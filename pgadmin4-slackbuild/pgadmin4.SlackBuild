@@ -1,0 +1,261 @@
+#!/bin/sh -e
+# Slackware build script for pgadmin4
+
+# Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# This script is for building pgAdimin4 for slackware current as of 06/18/2020
+# Full installation of slackware current is assumed, additionally slackware
+# package tools use is also assumed. 
+# pgAdmin4 requires QT 4.6 or above and python 2.7 or 3.4+, all provided with
+# full slackware installation. We do NOT check for those packages, however we
+# do check for postgresql package installation.
+# We utilise python3 by creating Python Virtual Environment under /usr/local
+# directory. We use python3 pip3 command to install required python modules for
+# pgAmin4 in the Virtual Environment directory.
+# PYTHONPATH = /usr/local/pve/pgAdmin4-pve/lib64/python3.8/site-packages
+
+CWD=$(pwd)
+PRGNAM=pgadmin4
+VERSION=${VERSION:-4.22}
+BUILD=${BUILD:-4}
+TAG=${TAG:-_wh}
+TMP=${TMP:-/tmp}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+SRC=$TMP/$PRGNAM-$VERSION
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+# Step one: check for postgresql package installation - bailout if not found.
+# Assume slackpkg use. Is postgresql package installed?
+PG_PKG=$(ls /var/lib/pkgtools/packages/postgresql*)
+
+# empty string from ls command above indecates missing PostgreSQL package
+if [ -z "$PG_PKG" ]; then
+    echo "PostgreSQL package not found. Please install PostgreSQL with"
+    echo "slackpkg. Exiting!"
+    exit 1;
+fi
+
+# pg_config file is usually installed in postgresql bin directory
+PG_BIN_PART1=$(cat $PG_PKG | egrep "*/bin/pg_config")
+
+# empty string means missed up installation!
+if [ -z "$PG_BIN_PART1" ]; then
+    echo "ERROR: Could not get path for PostgreSQL bin directory."
+    echo "Exiting!"
+    exit 1;
+fi
+
+# prepend leading slash to directory
+SLASH=/
+
+# with leading slash this is pg_config file which MUST exist in file system
+if [ ! -f "$SLASH$PG_BIN_PART1" ]; then
+    echo "ERROR: Could not find postgresql pg_config configuration file."
+    echo "Ensure that postgresql package is propely installed with slackware"
+    echo "package tools. Exiting."
+    exit 1
+fi
+# seems good postgresql package installation.
+
+# Step 2: run the build in python virtual environment
+PVE_ROOT=/usr/local/pve
+APP_PVE=$PVE_ROOT/pgAdmin4-pve
+
+# activate python virtual environment
+if [ ! -f $APP_PVE/bin/activate ]; then
+  echo ""
+  echo "Missing or wrong path to application Python Virtual Environment!"
+  echo "This slackware build script rquires Python Virtual Environment to be"
+  echo "initialed by \"mk-pve.sh\" found with package source."
+  echo "Please run the script \"mk-pve.sh\" before this one."
+  echo ""
+  exit 1;
+fi
+
+source $APP_PVE/bin/activate
+
+# Save and check return value from above!
+RET_VALUE=$?
+SUCCESS=0
+
+if [ $RET_VALUE -ne $SUCCESS ]; then
+    echo "ERROR: Could not activate Python Virtual Environment!"
+    echo "Make sure to run mk-pve.sh script to set it up."
+    echo "Exiting"
+    exit 1
+fi
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvzf $CWD/$PRGNAM-$VERSION.tar.gz
+
+# move to source root
+cd $SRC
+
+# set sane permissions
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# use python virtual environment paths in runtime/Server.cpp
+# please note that developers claim that paths are NOT hard coded
+patch -u runtime/Server.cpp -i $CWD/pve-paths.patch
+
+# use python virtual environment paths in runtime/ConfigWindow.ui
+# You NEED to manually enter PYTHONPATH on first use!
+PYTHONVERSION="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+sed -E "s|/usr/pgadmin4/web|/usr/lib$LIBDIRSUFFIX/pgadmin4/web|g;
+        s|/usr/pgadmin4/lib/python2\.7|/usr/local/pve/pgAdmin4-pve/lib$LIBDIRSUFFIX/python$PYTHONVERSION|g" \
+      -i runtime/ConfigWindow.ui
+
+convert +set date:create +set date:modify runtime/pgAdmin4.{ico,png}
+
+export PGADMIN_PYTHON_DIR=/usr
+
+cd runtime
+
+qmake-qt5
+make
+
+# make documentation
+cd $SRC
+make docs
+
+# Make javascripts bundles? Requires yarn v1.22.4 and nodejs v14.4.0
+if [ "${BUNDLE:-no}" = "yes" ]; then
+  echo ""
+  echo "Building javascripts bundles ..."
+  make install-node
+  make bundle
+  
+else
+  echo ""
+  echo "Skipping bundles making! Pass BUNDLE=yes to script to make them."
+  echo ""
+fi
+
+# done compiling ... copy files and directories to package
+
+# Install web and docs directories
+mkdir -p $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US
+cp -a web "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4"
+cp -a docs/en_US/_build/html "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US"
+
+# file provided with this slackbuild "pgAdmin4-pve.sh" is a simple wrapper
+# script to start pgAdimin4 executable in python virtual environment
+start_script=pgAdmin4-pve.sh
+
+# Install binary and scripts 
+install -Dm 755 runtime/pgAdmin4 "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/runtime/pgAdmin4"
+install -Dm 755 $CWD/$start_script "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/runtime/$start_script"
+install -Dm 755 /dev/stdin "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/runtime/pgadmin4-initial-server" <<END
+#!/bin/sh
+# run script once to initial server in desktop mode
+source $APP_PVE/bin/activate
+python3 /usr/lib$LIBDIRSUFFIX/pgadmin4/web/setup.py
+END
+
+# Install icons
+install -Dm 644 runtime/pgAdmin4-0.png "$PKG/usr/share/icons/hicolor/256x256/apps/pgAdmin4.png"
+install -Dm 644 runtime/pgAdmin4-1.png "$PKG/usr/share/icons/hicolor/48x48/apps/pgAdmin4.png"
+install -Dm 644 runtime/pgAdmin4-2.png "$PKG/usr/share/icons/hicolor/32x32/apps/pgAdmin4.png"
+install -Dm 644 runtime/pgAdmin4-3.png "$PKG/usr/share/icons/hicolor/16x16/apps/pgAdmin4.png"
+
+# needed config files
+install -Dm 644 /dev/stdin "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/config_distro.py" <<END
+SERVER_MODE = False
+HELP_PATH = "/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US/html"
+END
+cp $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/config_distro.py \
+   $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/config_local.py
+
+# remove not needed
+rm -rf $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/regression
+rm -rf "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US/html/_sources"
+
+# remove __pycache__ and test(s) directories 
+find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "__pycache__" -type d -print0 | xargs -0 rm -rf
+find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "test" -type d -print0 | xargs -0 rm -rf
+find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "tests" -type d -print0 | xargs -0 rm -rf
+
+# Install desktop file
+# Note we use our start_script to start the application
+install -Dm 755 /dev/stdin "$PKG/usr/share/applications/pgAdmin4.desktop" <<END
+[Desktop Entry]
+Encoding=UTF-8
+Name=pgAdmin 4
+Exec=/usr/lib$LIBDIRSUFFIX/pgadmin4/runtime/$start_script
+Icon=pgAdmin4
+Type=Application
+Categories=Application;Development;Database;
+MimeType=text/html
+DocPath=/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US/html
+Comment=PostgreSQL Tools
+Keywords=database;db;sql;query;administration;development;
+END
+
+# I do copy ALL package-making files
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a LICENSE README $PKG/usr/doc/$PRGNAM-$VERSION
+cp $CWD/$PRGNAM.SlackBuild $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/pgAdmin4-pve.sh $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/mk-pve.sh $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/pve-paths.patch $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/pgadmin4.conf $PKG/usr/doc/$PRGNAM-$VERSION
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+
+# be nice
+deactivate
+cd $CWD
+
+exit $SUCCESS

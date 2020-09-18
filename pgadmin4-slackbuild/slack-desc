@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+pgadmin4: pgadmin4 (PostgreSQL design and management interface)
+pgadmin4:
+pgadmin4: pgAdmin4 is the most popular and feature rich Open Source
+pgadmin4: administration and development platform for PostgreSQL, the most
+pgadmin4: advanced Open Source database in the world.
+pgadmin4:
+pgadmin4: pgAdmin4 is written as a web application in Python, using jQuery and
+pgadmin4: Bootstrap for the client side processing and UI. On the server side,
+pgadmin4: Flask is being utilised.
+pgadmin4:
+pgadmin4:
