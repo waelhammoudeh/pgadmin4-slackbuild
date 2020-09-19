@@ -147,10 +147,8 @@ fi
 
 cd $PVE_ROOT
 
-# create APP_PVE for pgAdimin4 
+# create - initial APP_PVE for pgAdimin4 
 $PY_EXEC -m venv $APP_PVE
-
-echo "Created APP_PVE at $APP_PVE"
 
 # activate virtual environment to install required modules
 source $APP_PVE/bin/activate
