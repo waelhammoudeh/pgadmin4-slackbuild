@@ -9,9 +9,10 @@ APP_PVE=pgAdmin4-pve
 if [ ! -f $PVE_ROOT/$APP_PVE/bin/activate ]; then
   echo ""
   echo "Missing or wrong path to application Python Virtual Environment!"
-  echo "This slackware application rquires Python Virtual Environment to be"
-  echo "initialed by \"mk-pve.sh\" found with package source."
-  echo "You may want to rerun the script \"mk-pve.sh\"!?"
+  echo "This application requires Python Virtual Environment to be"
+  echo "initialed by \"mk-pve.sh\" found with build script source."
+  echo "Please see \"README.PVE\" file with build srcipt source."  
+  echo "You need to run or rerun the script \"mk-pve.sh\"!?"
   echo ""
   exit 1;
 fi
