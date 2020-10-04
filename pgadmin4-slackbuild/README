@@ -23,7 +23,7 @@ Files list: the list has eleven files - [source included; get source tar ball fr
  3) README.PVE
  4) mk-pve.sh  
  5) pgAdmin4-pve.sh  
- 6) pgadmin4-4.25.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.25/source/pgadmin4-4.25.tar.gz 
+ 6) pgadmin4-4.26.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.26/source/pgadmin4-4.26.tar.gz 
  7) pgadmin4.SlackBuild
  8) pgadmin4.conf  
  9) pve-paths.patch

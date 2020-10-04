@@ -1,11 +1,10 @@
-# pgadmin4-slackbuild
 pgAdmin 4
 =========
 
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This is pgadmin4.SlackBuils README file for version 4.25.
+This is pgadmin4.SlackBuils README file for version 4.26.
 
 Requirements:
  1) Slackware current: provides qt5 and python3
@@ -24,13 +23,15 @@ Files list: the list has eleven files - [source included; get source tar ball fr
  3) README.PVE
  4) mk-pve.sh  
  5) pgAdmin4-pve.sh  
- 6) pgadmin4-4.25.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.25/source/pgadmin4-4.25.tar.gz 
+ 6) pgadmin4-4.26.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.26/source/pgadmin4-4.26.tar.gz 
  7) pgadmin4.SlackBuild
  8) pgadmin4.conf  
  9) pve-paths.patch
  10) slack-desc
  11) pgadmin4.info
-Please place all files in one directory.
+ 
+Please place all files in one directory. Or download the compressed tarball
+and untar it.
 
 Start Fresh:
   Remove old package and all its files. If you used my build use removepkg.
@@ -52,7 +53,7 @@ Build Instructions:
       root# BUNDLE=yes ./pgadmin4.SlackBuild -- to build javascripts bundles
     this will produce slackware package in /tmp directory.
  4) Install the package from above with:
-      root# installpkg /tmp/pgadmin4-4.22-x86_64-5_wh.tgz
+      root# installpkg /tmp/pgadmin4-4.26-x86_64-1_wh.tgz
  5) As root again run initial server setup script:
       $ /usr/lib64/pgadmin4/runtime/pgadmin4-initial-server
     this will initial the application.
@@ -61,6 +62,11 @@ Build Instructions:
       user$ mkdir ~/.config/pgadmin
       user$ cp {script-directory}/pgadmin4.conf ~/.config/pgadmin
  7) Start pgAdmin4 on your desktop - first use maybe slow Starting.
+ 
+About javascripts bundles:
+ I build my package WITHOUT bundles, I think bundles will benefits server mode
+setup. I use and build the desktop application, you are on your own to setup
+server mode.
  
 Hope everything work great for all.
 
