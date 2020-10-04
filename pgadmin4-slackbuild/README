@@ -51,7 +51,7 @@ Build Instructions:
       root# BUNDLE=yes ./pgadmin4.SlackBuild -- to build javascripts bundles
     this will produce slackware package in /tmp directory.
  4) Install the package from above with:
-      root# installpkg /tmp/pgadmin4-4.22-x86_64-5_wh.tgz
+      root# installpkg /tmp/pgadmin4-4.26-x86_64-1_wh.tgz
  5) As root again run initial server setup script:
       $ /usr/lib64/pgadmin4/runtime/pgadmin4-initial-server
     this will initial the application.
@@ -60,6 +60,11 @@ Build Instructions:
       user$ mkdir ~/.config/pgadmin
       user$ cp {script-directory}/pgadmin4.conf ~/.config/pgadmin
  7) Start pgAdmin4 on your desktop - first use maybe slow Starting.
+ 
+About javascripts bundles:
+ I build my package WITHOUT bundles, I think bundles will benefits server mode
+setup. I use and build the desktop application, you are on your own to setup
+server mode.
  
 Hope everything work great for all.
 
