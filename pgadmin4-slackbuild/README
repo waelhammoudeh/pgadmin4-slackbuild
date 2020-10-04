@@ -4,7 +4,7 @@ pgAdmin 4
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This is pgadmin4.SlackBuils README file for version 4.25.
+This is pgadmin4.SlackBuils README file for version 4.26.
 
 Requirements:
  1) Slackware current: provides qt5 and python3
@@ -29,7 +29,9 @@ Files list: the list has eleven files - [source included; get source tar ball fr
  9) pve-paths.patch
  10) slack-desc
  11) pgadmin4.info
-Please place all files in one directory.
+ 
+Please place all files in one directory. Or download the compressed tarball
+and untar it.
 
 Start Fresh:
   Remove old package and all its files. If you used my build use removepkg.
