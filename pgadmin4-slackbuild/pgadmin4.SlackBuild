@@ -1,6 +1,6 @@
 #!/bin/sh -e
-# Slackware build script for pgadmin4
 
+# Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
 # All rights reserved.
 #
@@ -21,21 +21,29 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# This script is for building pgAdimin4 for slackware current as of 06/18/2020
+# Modified by: Wael Hammoudeh - w_hammoudeh at hotmail.com
+# Modification was inspired by the thread on Linux Questions Slackware forum
+# "https://www.linuxquestions.org/questions/slackware-14/"
+# with title: "building-pgadmin-4-in-slackware-current-4175648889"
+# 
+# Big thank you is due to "bassmadrigal" for his work posted in the above 
+# mentioned thread. Also thank you to ArchLinux PKGBUILD for pgAdmin4.
+# My approach was different; using Python Virtual Environment. Please DO read
+# the README.PVE file.
+# PVE is recommended by pgAdmin4 developers, we do not have to provide almost
+# 30 SlackBuilds scripts for required Python modules and PVE does not modify
+# system Python installation.
+#
+# This script REQUIRES Python Virtual Environment with under "/usr/local/pve".
+# Use the provided "mk-pve.sh" script to initial and setup your environment.
 # Full installation of slackware current is assumed, additionally slackware
 # package tools use is also assumed. 
-# pgAdmin4 requires QT 4.6 or above and python 2.7 or 3.4+, all provided with
-# full slackware installation. We do NOT check for those packages, however we
-# do check for postgresql package installation.
-# We utilise python3 by creating Python Virtual Environment under /usr/local
-# directory. We use python3 pip3 command to install required python modules for
-# pgAmin4 in the Virtual Environment directory.
-# PYTHONPATH = /usr/local/pve/pgAdmin4-pve/lib64/python3.8/site-packages
+
 
 CWD=$(pwd)
 PRGNAM=pgadmin4
-VERSION=${VERSION:-4.22}
-BUILD=${BUILD:-4}
+VERSION=${VERSION:-4.25}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 TMP=${TMP:-/tmp}
 PKG=$TMP/package-$PRGNAM
@@ -68,7 +76,7 @@ fi
 # Assume slackpkg use. Is postgresql package installed?
 PG_PKG=$(ls /var/lib/pkgtools/packages/postgresql*)
 
-# empty string from ls command above indecates missing PostgreSQL package
+# empty string from ls command above indicates missing PostgreSQL package
 if [ -z "$PG_PKG" ]; then
     echo "PostgreSQL package not found. Please install PostgreSQL with"
     echo "slackpkg. Exiting!"
@@ -91,7 +99,7 @@ SLASH=/
 # with leading slash this is pg_config file which MUST exist in file system
 if [ ! -f "$SLASH$PG_BIN_PART1" ]; then
     echo "ERROR: Could not find postgresql pg_config configuration file."
-    echo "Ensure that postgresql package is propely installed with slackware"
+    echo "Ensure that postgresql package is properly installed with slackware"
     echo "package tools. Exiting."
     exit 1
 fi
@@ -105,8 +113,8 @@ APP_PVE=$PVE_ROOT/pgAdmin4-pve
 if [ ! -f $APP_PVE/bin/activate ]; then
   echo ""
   echo "Missing or wrong path to application Python Virtual Environment!"
-  echo "This slackware build script rquires Python Virtual Environment to be"
-  echo "initialed by \"mk-pve.sh\" found with package source."
+  echo "This slackware build script requires Python Virtual Environment to be"
+  echo "initialed by \"mk-pve.sh\" found with build source."
   echo "Please run the script \"mk-pve.sh\" before this one."
   echo ""
   exit 1;
@@ -143,14 +151,14 @@ find -L . \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 # use python virtual environment paths in runtime/Server.cpp
-# please note that developers claim that paths are NOT hard coded
 patch -u runtime/Server.cpp -i $CWD/pve-paths.patch
 
 # use python virtual environment paths in runtime/ConfigWindow.ui
-# You NEED to manually enter PYTHONPATH on first use!
+# You NEED to manually enter PYTHONPATH on first use! Or use pgadmin4.conf 
+# found with build script by copying to ~/.config/pgadmin/pgadmin4.conf
 PYTHONVERSION="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
-sed -E "s|/usr/pgadmin4/web|/usr/lib$LIBDIRSUFFIX/pgadmin4/web|g;
-        s|/usr/pgadmin4/lib/python2\.7|/usr/local/pve/pgAdmin4-pve/lib$LIBDIRSUFFIX/python$PYTHONVERSION|g" \
+sed -E "s|/usr/pgadmin4/web|/usr/lib${LIBDIRSUFFIX}/pgadmin4/web|g;
+        s|/usr/pgadmin4/lib/python[0-9\\.]+|/usr/local/pve/pgAdmin4-pve/lib${LIBDIRSUFFIX}/python${PYTHONVERSION}|g" \
       -i runtime/ConfigWindow.ui
 
 convert +set date:create +set date:modify runtime/pgAdmin4.{ico,png}
@@ -159,6 +167,7 @@ export PGADMIN_PYTHON_DIR=/usr
 
 cd runtime
 
+# use qmake-qt5 - slackware current has qmake-qt4 AND qmake-qt5
 qmake-qt5
 make
 
@@ -218,7 +227,7 @@ cp $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/config_distro.py \
 rm -rf $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web/regression
 rm -rf "$PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/docs/en_US/html/_sources"
 
-# remove __pycache__ and test(s) directories 
+# remove __pycache__ and test(s) directories
 find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "__pycache__" -type d -print0 | xargs -0 rm -rf
 find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "test" -type d -print0 | xargs -0 rm -rf
 find $PKG/usr/lib$LIBDIRSUFFIX/pgadmin4/web -name "tests" -type d -print0 | xargs -0 rm -rf
@@ -241,7 +250,9 @@ END
 
 # I do copy ALL package-making files
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a LICENSE README $PKG/usr/doc/$PRGNAM-$VERSION
+cp $CWD/LICENSE $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/README $PKG/usr/doc/$PRGNAM-$VERSION/
+cp $CWD/README.PVE $PKG/usr/doc/$PRGNAM-$VERSION/
 cp $CWD/$PRGNAM.SlackBuild $PKG/usr/doc/$PRGNAM-$VERSION/
 cp $CWD/pgAdmin4-pve.sh $PKG/usr/doc/$PRGNAM-$VERSION/
 cp $CWD/mk-pve.sh $PKG/usr/doc/$PRGNAM-$VERSION/
