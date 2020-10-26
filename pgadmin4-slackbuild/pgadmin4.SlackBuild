@@ -34,7 +34,8 @@
 # 30 SlackBuilds scripts for required Python modules and PVE does not modify
 # system Python installation.
 #
-# This script REQUIRES Python Virtual Environment with under "/usr/local/pve".
+# This script REQUIRES Python Virtual Environment initialed at:
+# "/usr/local/pve/pgAdmin4-pve/".
 # Use the provided "mk-pve.sh" script to initial and setup your environment.
 # Full installation of slackware current is assumed, additionally slackware
 # package tools use is also assumed. 
@@ -42,7 +43,7 @@
 
 CWD=$(pwd)
 PRGNAM=pgadmin4
-VERSION=${VERSION:-4.26}
+VERSION=${VERSION:-4.27}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 TMP=${TMP:-/tmp}
