@@ -4,7 +4,7 @@ pgAdmin 4
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This is pgadmin4.SlackBuild README file for version 4.26.
+This is pgadmin4.SlackBuild README file for version 4.27.
 
 Requirements:
  1) Slackware current: provides qt5 and python3
@@ -23,7 +23,7 @@ Files list: the list has eleven files - [source included; get source tar ball fr
  3) README.PVE
  4) mk-pve.sh  
  5) pgAdmin4-pve.sh  
- 6) pgadmin4-4.26.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.26/source/pgadmin4-4.26.tar.gz 
+ 6) pgadmin4-4.27.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.27/source/pgadmin4-4.27.tar.gz 
  7) pgadmin4.SlackBuild
  8) pgadmin4.conf  
  9) pve-paths.patch
@@ -53,7 +53,7 @@ Build Instructions:
       root# BUNDLE=yes ./pgadmin4.SlackBuild -- to build javascripts bundles
     this will produce slackware package in /tmp directory.
  4) Install the package from above with:
-      root# installpkg /tmp/pgadmin4-4.26-x86_64-1_wh.tgz
+      root# installpkg /tmp/pgadmin4-4.27-x86_64-1_wh.tgz
  5) As root again run initial server setup script:
       $ /usr/lib64/pgadmin4/runtime/pgadmin4-initial-server
     this will initial the application.
@@ -68,7 +68,7 @@ About javascripts bundles:
 setup. I use and build the desktop application, you are on your own to setup
 server mode.
  
-Hope everything work great for all.
+Hope everything works great for all.
 
 To configure the server manually, you can right-click on its tray icon and
 choose configure which will bring up a dialog with two tabs for settings:
@@ -76,7 +76,7 @@ choose configure which will bring up a dialog with two tabs for settings:
   Set Browser Command to : /usr/bin/google-chrome-stable %URL%
                       or : /usr/bin/firefox %URL%
                       
-  Set Python Path to: /usr/local/pve/pgAdmin4-pve/lib64/python3.8/site-packages
+  Set Python Path to: /usr/local/pve/pgAdmin4-pve/lib64/python3.9/site-packages
   
 Here is my complete pgadmin4.conf file in my ~/.config/pgadmin/pgadmin4.conf
 
@@ -86,7 +86,7 @@ BrowserCommand=/usr/bin/google-chrome-stable %URL%
 FixedPort=false
 OpenTabAtStartup=true
 PortNumber=1
-PythonPath=/usr/local/pve/pgAdmin4-pve/lib64/python3.8/site-packages
+PythonPath=/usr/local/pve/pgAdmin4-pve/lib64/python3.9/site-packages
 
 Enjoy.
 Wael Hammoudeh
