@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-# Python Virtual Environment for pgAdimin4 version 4.25
-# Date: September 13, 2020
+# Python Virtual Environment updated for pgAdimin4 version 4.27
+# Date: October 26, 2020
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
@@ -86,7 +86,7 @@ CWD=$(pwd)
 
 rm -f requirements.txt
 
-# File requirements.txt was copied from pgAmin4-4.25 source tar ball
+# File requirements.txt was copied from pgAmin4 version 4.27 source tar ball
 install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 ###############################################################################
 #
@@ -116,11 +116,11 @@ Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.3
 Flask-Compress==1.4.0
 passlib==1.7.2
-pytz==2018.9
+pytz>=2020.1,<2021
 simplejson==3.16.0
 six>=1.12.0
 speaklater==1.3
-sqlparse==0.2.4
+sqlparse>=0.3.0,<0.4
 WTForms==2.2.1
 Flask-Paranoid==0.2.0
 psutil>=5.7.0
