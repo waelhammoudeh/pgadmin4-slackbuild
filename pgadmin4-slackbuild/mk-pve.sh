@@ -210,7 +210,12 @@ if test -d ${DIR_PYMODULES_PATH}; then
 fi
 
 echo ""
-echo " All done; to use virtual environment just source the script like:" 
+echo " All done :)"
+echo " This Python Virtual Environment is made for pgAdmin4."
+echo " The accompanied SlackBuild script builds the package under"
+echo " this virtual environment, in addition the resulting app"
+echo " is started under this virtual environment."
+echo " To use virtual environment just source the script like:" 
 echo "   source $APP_PVE/bin/activate"
 echo " and to exit or terminate just issue:"
 echo "   deactivate"
