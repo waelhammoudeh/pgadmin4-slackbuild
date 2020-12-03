@@ -13,7 +13,7 @@ Requirements:
  3) Internet connection.
 
 Optional: [needed to build javascripts bundles]
-  1) Yarn-v1.22.4.tar.gz --> URL: https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.g
+  1) Yarn-v1.22.4.tar.gz --> URL: https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.gz
   2) Nodejs-v14.4.0.tar.gz --> URL: https://nodejs.org/dist/v14.4.0/node-v14.4.0.tar.gz
   To build javascripts packages (bundles). Available SlackBuild scripts for both packages
   will work with just changing the version number in each script.
