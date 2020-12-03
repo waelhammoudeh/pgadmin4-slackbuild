@@ -87,6 +87,8 @@ CWD=$(pwd)
 rm -f requirements.txt
 
 # File requirements.txt was copied from pgAmin4 version 4.27 source tar ball
+# No change in requirements.txt for version 4.28, remade pve just to try new
+# python pip in slackware current.
 install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 ###############################################################################
 #
