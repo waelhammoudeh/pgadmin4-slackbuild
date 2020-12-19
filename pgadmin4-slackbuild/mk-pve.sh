@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-# Python Virtual Environment updated for pgAdimin4 version 4.27
-# Date: October 26, 2020
+# Python Virtual Environment updated for pgAdimin4 version 4.29
+# Date: Dec. 19/2020
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
@@ -130,8 +130,8 @@ psycopg2>=2.8
 python-dateutil>=2.8.0
 SQLAlchemy>=1.3.13
 Flask-Security-Too>=3.0.0
-bcrypt<=3.1.7
-cryptography<=3.0
+bcrypt<=3.1.7;
+cryptography<=3.0;
 sshtunnel>=0.1.5
 ldap3>=2.5.1
 END
