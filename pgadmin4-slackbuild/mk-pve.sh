@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-# Python Virtual Environment updated for pgAdimin4 version 4.29
-# Date: Dec. 19/2020
+# Python Virtual Environment updated for pgAdimin4 version 4.30
+# Date: Feb. 6/2021
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
@@ -122,18 +122,21 @@ pytz>=2020.1,<2021
 simplejson==3.16.0
 six>=1.12.0
 speaklater==1.3
-sqlparse>=0.3.0,<0.4
+sqlparse>=0.3.0,<0.5
 WTForms==2.2.1
 Flask-Paranoid==0.2.0
 psutil>=5.7.0
 psycopg2>=2.8
 python-dateutil>=2.8.0
 SQLAlchemy>=1.3.13
-Flask-Security-Too>=3.0.0
-bcrypt<=3.1.7;
-cryptography<=3.0;
+Flask-Security-Too>=3.0.0,<4.0.0
+bcrypt<=3.1.7
+cryptography<=3.0
 sshtunnel>=0.1.5
 ldap3>=2.5.1
+Flask-BabelEx>=0.9.4
+gssapi>=1.6.11; python_version >= '3.6'
+gssapi==1.6.2; python_version <= '3.5'
 END
 
 # tell user what we are doing
@@ -208,6 +211,9 @@ find . -name "tests" -type d -print0 | xargs -0 rm -rf
 if test -d ${DIR_PYMODULES_PATH}; then
   ln -s $(basename ${DIR_PYMODULES_PATH}) ${DIR_PYMODULES_PATH}/../python
 fi
+
+# remove requirements text file
+rm $CWD/requirements.txt
 
 echo ""
 echo " All done :)"
