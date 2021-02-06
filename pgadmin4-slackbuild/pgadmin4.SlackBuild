@@ -43,7 +43,7 @@
 
 CWD=$(pwd)
 PRGNAM=pgadmin4
-VERSION=${VERSION:-4.29}
+VERSION=${VERSION:-4.30}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 TMP=${TMP:-/tmp}
@@ -170,7 +170,7 @@ cd runtime
 
 # use qmake-qt5 - slackware current has qmake-qt4 AND qmake-qt5
 qmake-qt5
-make
+make -j$(expr $(nproc) + 1)
 
 # make documentation
 cd $SRC
