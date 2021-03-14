@@ -3,7 +3,15 @@
 # Wrapper script to start pgAdmin4 under Python Virtual Environment
 
 PVE_ROOT=/usr/local/pve/
-APP_PVE=pgAdmin4-pve
+APP_PVE=pgAdmin4-pve5
+
+ARCH=$( uname -m )  
+LIBDIRSUFFIX=""
+if [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+fi
+
+APP_DIR=/usr/lib$LIBDIRSUFFIX/pgadmin4-5.0/runtime
 
 # activate python virtual environment
 if [ ! -f $PVE_ROOT/$APP_PVE/bin/activate ]; then
@@ -19,5 +27,7 @@ fi
 
 source $PVE_ROOT/$APP_PVE/bin/activate
 
-# now start pgAdmin4 executable
-/usr/lib64/pgadmin4/runtime/pgAdmin4
+cd $APP_DIR
+
+node_modules/nw/nwjs/nw .
+
