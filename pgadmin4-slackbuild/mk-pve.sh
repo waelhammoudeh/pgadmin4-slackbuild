@@ -1,15 +1,14 @@
 #!/bin/sh -e
 
-# Python Virtual Environment updated for pgAdimin4 version 4.30
-# Date: Feb. 6/2021
+# Python Virtual Environment updated for pgAdimin4 version 5.0
+# Date: March 12/2021
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
 # Python "venv" module is used to create this virtual environment.
 # pgAdmin4 developers recommend running it under Python Virtual Environment.
-# I also build pgAdmin4 slackware package under this Python Virtual Environment.
-# ------------------------------------------------------------------
 
+# ------------------------------------------------------------------
 # NOTE ***** INTERNET CONNECTION IS REQUIRED FOR THIS SCRIPT *******
 #      *****     NO CONNECTION CHECKING IS DONE HERE !!!     ******* 
 # ------------------------------------------------------------------
@@ -27,7 +26,7 @@
 # SOURCE/pkg/linux/build-functions.sh file.
 
 PVE_ROOT=/usr/local/pve
-APP_PVE=$PVE_ROOT/pgAdmin4-pve
+APP_PVE=$PVE_ROOT/pgAdmin4-pve5
 
 if [ -d $APP_PVE ]; then
   echo ""
@@ -84,11 +83,11 @@ PATH=$PATH:$PG_BIN_PATH
 
 CWD=$(pwd)
 
+# remove if left over
 rm -f requirements.txt
 
-# File requirements.txt was copied from pgAmin4 version 4.27 source tar ball
-# No change in requirements.txt for version 4.28, remade pve just to try new
-# python pip in slackware current.
+# File requirements.txt was copied from pgAmin4 version 5.0 source tar ball
+
 install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 ###############################################################################
 #
@@ -106,37 +105,34 @@ install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 #       to pkg/pip/setup_pip.py (in extras_require), otherwise they will be
 #       ignored when building a PIP Wheel.
 ##############################################################################
-blinker==1.4
-Flask==1.0.2
-Werkzeug>=0.15.0
-Flask-Gravatar==0.5.0
-Flask-Login==0.4.1
-Flask-Mail==0.9.1
-Flask-Migrate==2.4.0
-Flask-Principal==0.4.0
-Flask-SQLAlchemy==2.4.1
-Flask-WTF==0.14.3
-Flask-Compress==1.4.0
-passlib==1.7.2
-pytz>=2020.1,<2021
-simplejson==3.16.0
-six>=1.12.0
-speaklater==1.3
-sqlparse>=0.3.0,<0.5
-WTForms==2.2.1
-Flask-Paranoid==0.2.0
-psutil>=5.7.0
-psycopg2>=2.8
-python-dateutil>=2.8.0
-SQLAlchemy>=1.3.13
-Flask-Security-Too>=3.0.0,<4.0.0
-bcrypt<=3.1.7
-cryptography<=3.0
-sshtunnel>=0.1.5
-ldap3>=2.5.1
-Flask-BabelEx>=0.9.4
-gssapi>=1.6.11; python_version >= '3.6'
-gssapi==1.6.2; python_version <= '3.5'
+cheroot==8.*
+Flask==1.*
+Flask-Gravatar==0.*
+Flask-Login==0.*
+Flask-Mail==0.*
+Flask-Migrate==2.*
+Flask-SQLAlchemy==2.*
+Flask-WTF==0.*
+Flask-Compress==1.*
+passlib==1.*
+pytz==2021.*
+simplejson==3.*
+six==1.*
+speaklater3==1.*
+sqlparse==0.*
+WTForms==2.*
+Flask-Paranoid==0.*
+psutil==5.*
+psycopg2==2.8.*
+python-dateutil==2.*
+SQLAlchemy==1.3.*
+Flask-Security-Too==3.*
+bcrypt==3.*
+cryptography==3.*
+sshtunnel==0.*
+ldap3==2.*
+Flask-BabelEx==0.*
+gssapi==1.6.*
 END
 
 # tell user what we are doing
