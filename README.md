@@ -4,6 +4,8 @@ pgAdmin 4
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
+The build script has been updated for pgAdmin4 version 5.0 which uses nodeJS.
+
 This is a slackbuild script for building pgAdmin4 package for slackware.
 The script was inspired by a thread on Linux Questions Slackware forum
 "https://www.linuxquestions.org/questions/slackware-14/building-pgadmin-4-in-slackware-current-4175648889"
