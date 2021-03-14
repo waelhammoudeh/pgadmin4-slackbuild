@@ -52,3 +52,10 @@ version 4.25 changes:
  *) Building the documentation for pgAdmin4-4.25 requires Sphinx version 2.2.1
  *) psycopg2 module is included in the "requirements.txt" file now.
  
+version 5.0 changes:
+  *) APP_PVE get  the number "5" appended to the end, so version 4.30 and 5.0
+     can coexist.
+      APP_PVE = /usr/local/pve/pgAdmin4-pve5
+  *) IMHO, using nodeJS adds to your security risk. Use it at your own risk!
+  
+      
