@@ -1,100 +1,63 @@
 pgAdmin 4
 =========
 
+This is the README file for pgadmin4.SlackBuild script.
+You use the scripts included here at your OWN risk.
+
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This is pgadmin4.SlackBuild README.
-This SlackBuild is updated for pgAdmin4 version 4.30 on 2/6/2021
+This SlackBuild is updated for pgAdmin4 version 5.0 on March 14/2021
+This script builds the "Desktop Application" only, no server code is
+included in the produced package.
 
-Requirements:
- 1) Slackware current: provides qt5 and python3
- 2) PostgreSQL slackware package, version ??? I use 9.6.0 and 10.10.0
- 3) Internet connection.
+In version 5.0 developers "implemented runtime using NWjs to open pgAdmin4 in 
+a standalone window instead of the system tray and web browser." quoted from
+new feature of the release notes. See the release notes at:
+ https://www.pgadmin.org/docs/pgadmin4/latest/release_notes.html
+ 
+Using Node Webkit JavaScript brings new risks, new requirements and a lot of
+changes to this build script.
 
-Optional: [needed to build javascripts bundles]
-  1) Yarn-v1.22.4.tar.gz --> URL: https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.gz
-  2) Nodejs-v14.4.0.tar.gz --> URL: https://nodejs.org/dist/v14.4.0/node-v14.4.0.tar.gz
-  To build javascripts packages (bundles). Available SlackBuild scripts for both packages
-  will work with just changing the version number in each script.
+Requirements for version 5.0:
+ 1) Nodejs version 12 or later.
+ 2) Yarn.
+ 3) python3 - included in slackware current.
+ 4) PostgreSQL slackware package.
+ 5) Internet connection.
   
-Files list: the list has eleven files - [source included; get source tar ball from its URL below]
+File list included in this directory:
  1) LICENSE  
  2) README
  3) README.PVE
  4) mk-pve.sh  
  5) pgAdmin4-pve.sh  
- 6) pgadmin4-4.30.tar.gz --> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.30/source/pgadmin4-4.30.tar.gz
- 7) pgadmin4.SlackBuild
- 8) pgadmin4.conf  
- 9) pve-paths.patch
- 10) slack-desc
- 11) pgadmin4.info
+ 6) pgadmin4.SlackBuild
+ 7) slack-desc
+ 8) pgadmin4.info
  
-Please place all files in one directory. Or download the compressed tarball
-and untar it.
+You also obviously need the source, get it from the link below
 
-Start Fresh:
-  Remove old package and all its files. If you used my build use removepkg.
-  Then remove its installation directory by: rm -rf /usr/lib64/pgadmin4
-  We do so to remove all python cache files which may cause trouble!
-  Also remove /var/lib/pgadmin4 directory and python virtual environment
-  directory at /usr/local/pve/pgadmin4-pve.
-
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.0/source/pgadmin4-5.0.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.0/source/pgadmin4-5.0.tar.gz.asc
+ 
 Build Instructions:
- 1) Place all files in one directory - script directory
- 2) As root, change to script directory and run mk-pve.sh script:
-      root# ./mk-pve.sh
-    this will initial python virtual environment and install
-    all required python modules / packages.
- 3) As root run slackbuild script:
-      root# ./pgadmin4.SlackBuild  
-             -- or -- 
-      root# BUNDLE=yes ./pgadmin4.SlackBuild -- to build javascripts bundles
-    this will produce slackware package in /tmp directory.
- 4) Install the package from above with:
-      root# installpkg /tmp/pgadmin4-4.30-x86_64-1_wh.tgz
- 5) As root again run initial server setup script:
-      $ /usr/lib64/pgadmin4/runtime/pgadmin4-initial-server
-    this will initial the application.
-    Note: I think this step is needed for server mode! We do not do server mode :(
- 6) Now as your normal user, copy pgadmin4.conf:
-      user$ mkdir ~/.config/pgadmin
-      user$ cp {script-directory}/pgadmin4.conf ~/.config/pgadmin
- 7) Start pgAdmin4 on your desktop - first use maybe slow Starting.
+
+ 1) Install required packages. Both Nodejs and Yarn are available from 
+    www.slackbuilds.org, I suppose you have postgresql installed already. 
+
+ 2) Initial Python Virtual Environment with "mk-pve.sh" script provided.
+     * Note that I did not remove the prevoius pgadmin4-pve but added
+     * pgadmin4-pve5.
+
+ 3) Build the package with "pgadmin4.SlackBuild". You can find the built
+    package in your /tmp directory.
  
-About javascripts bundles:
- I build my package WITHOUT bundles, I think bundles will benefits server mode
-setup. I use and build the desktop application, you are on your own to setup
-server mode.
-
-Upgrade:
-  Note that if you have any issues when upgrading, please follow the steps
-  above for "Start Fresh".
-  Otherwise; update PVE by removing old directory and then run "mk-pve.sh"
-  script to initial new updated PVE - mk-pve.sh script usually is updated
-  for current python modules requirements. Build new package as above, then
-  use upgradepkg pgadmin4-{version}.tgz
-  
-Hope everything works great for all.
-
-To configure the server manually, you can right-click on its tray icon and
-choose configure which will bring up a dialog with two tabs for settings:
-
-  Set Browser Command to : /usr/bin/google-chrome-stable %URL%
-                      or : /usr/bin/firefox %URL%
-                      
-  Set Python Path to: /usr/local/pve/pgAdmin4-pve/lib64/python3.9/site-packages
-  
-Here is my complete pgadmin4.conf file in my ~/.config/pgadmin/pgadmin4.conf
-
-[General]
-ApplicationPath=/usr/lib64/pgadmin4/web
-BrowserCommand=/usr/bin/google-chrome-stable %URL%
-FixedPort=false
-OpenTabAtStartup=true
-PortNumber=1
-PythonPath=/usr/local/pve/pgAdmin4-pve/lib64/python3.9/site-packages
-
+ 4) Install the package with:
+     # installpkg /tmp/pgadmin4-5.0-x86_64-2_wh.tgz
+     
+    or upgrade the old with:
+     # upgradepkg /tmp/pgadmin4-5.0-x86_64-2_wh.tgz
+    
 Enjoy.
 Wael Hammoudeh
