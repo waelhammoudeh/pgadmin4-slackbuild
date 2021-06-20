@@ -7,24 +7,23 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 5.0 on March 14/2021
+This SlackBuild is updated for pgAdmin4 version 5.4 on June 19/2021
 This script builds the "Desktop Application" only, no server code is
 included in the produced package.
 
-In version 5.0 developers "implemented runtime using NWjs to open pgAdmin4 in 
-a standalone window instead of the system tray and web browser." quoted from
-new feature of the release notes. See the release notes at:
+Starting with version 5.0 developers "implemented runtime using NWjs to open
+pgAdmin4 in a standalone window instead of the system tray and web browser."
+quoted from new feature of the release notes. See the release notes at:
  https://www.pgadmin.org/docs/pgadmin4/latest/release_notes.html
  
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 5.0:
- 1) Nodejs version 12 or later.
- 2) Yarn.
- 3) python3 - included in slackware current.
- 4) PostgreSQL slackware package.
- 5) Internet connection.
+Requirements for version 5.4:
+ *) Nodejs version 12 or later.
+ *) Yarn.
+ *) PostgreSQL slackware package.
+ *) Internet connection.
   
 File list included in this directory:
  1) LICENSE  
@@ -38,9 +37,8 @@ File list included in this directory:
  
 You also obviously need the source, get it from the link below
 
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.0/source/pgadmin4-5.0.tar.gz
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.0/source/pgadmin4-5.0.tar.gz.asc
- 
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.4/source/pgadmin4-5.4.tar.gz
+
 Build Instructions:
 
  1) Install required packages. Both Nodejs and Yarn are available from 
@@ -48,16 +46,22 @@ Build Instructions:
 
  2) Initial Python Virtual Environment with "mk-pve.sh" script provided.
      * Note that I did not remove the prevoius pgadmin4-pve but added
-     * pgadmin4-pve5.
+     * pgadmin4-pve54.
 
  3) Build the package with "pgadmin4.SlackBuild". You can find the built
     package in your /tmp directory.
  
- 4) Install the package with:
-     # installpkg /tmp/pgadmin4-5.0-x86_64-2_wh.tgz
-     
-    or upgrade the old with:
-     # upgradepkg /tmp/pgadmin4-5.0-x86_64-2_wh.tgz
-    
+ 4) Use Slackware package tool (installpkg or upgradepkg) to install in
+     your system.
+
+Important Note:
+
+This version (also 5.3, I did not try 5.2) starts with white clear window!
+No user interface is visibale. Resizing the window with the mouse (or hit F10
+function key) will make the application UI visibale.
+Another way to fix this issue is to change the setting in pgadmin.js file in the
+runtime/src/js directory from 'show': false, to 'show': true, implemented in this
+script. This has a side effect too. See note in the script.
+
 Enjoy.
 Wael Hammoudeh

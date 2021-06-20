@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-# Python Virtual Environment updated for pgAdimin4 version 5.0
-# Date: March 12/2021
+# Python Virtual Environment updated for pgAdimin4 version 5.4
+# Date: June 18/2021
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
@@ -16,7 +16,7 @@
 # Python Virtual Environment PVE_ROOT is created under /usr/local directory:
 # PVE_ROOT=/usr/local/pve
 # Application virtual environment directory under PVE_ROOT:
-# APP_PVE=/usr/local/pve/pgAdmin4-pve
+# APP_PVE=/usr/local/pve/pgAdmin4-pve54
 # Script installs all required python packages plus "sphinx" - required to make
 # documentation.
 # If script finds APP_PVE directory, it exits and does nothing. So if you are
@@ -26,7 +26,7 @@
 # SOURCE/pkg/linux/build-functions.sh file.
 
 PVE_ROOT=/usr/local/pve
-APP_PVE=$PVE_ROOT/pgAdmin4-pve5
+APP_PVE=$PVE_ROOT/pgAdmin4-pve54
 
 if [ -d $APP_PVE ]; then
   echo ""
@@ -86,7 +86,7 @@ CWD=$(pwd)
 # remove if left over
 rm -f requirements.txt
 
-# File requirements.txt was copied from pgAmin4 version 5.0 source tar ball
+# File requirements.txt was copied from pgAmin4 version 5.4 source tar ball
 
 install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 ###############################################################################
@@ -99,13 +99,6 @@ install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 #
 ###############################################################################
 
-
-##############################################################################
-# NOTE: Any requirements with environment specifiers must be explicitly added
-#       to pkg/pip/setup_pip.py (in extras_require), otherwise they will be
-#       ignored when building a PIP Wheel.
-##############################################################################
-cheroot==8.*
 Flask==1.*
 Flask-Gravatar==0.*
 Flask-Login==0.*
@@ -126,13 +119,20 @@ psutil==5.*
 psycopg2==2.8.*
 python-dateutil==2.*
 SQLAlchemy==1.3.*
-Flask-Security-Too==3.*
+itsdangerous<=1.1.0
+Flask-Security-Too==4.*
 bcrypt==3.*
 cryptography==3.*
 sshtunnel==0.*
 ldap3==2.*
 Flask-BabelEx==0.*
 gssapi==1.6.*
+flask-socketio>=5.0.1
+eventlet==0.31.0
+httpagentparser==1.9.*
+user-agents==2.2.0
+pywinpty==1.1.1; sys_platform=="win32"
+
 END
 
 # tell user what we are doing
