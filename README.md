@@ -10,7 +10,7 @@ This is a slackbuild script for building pgAdmin4 package for slackware.
 The script was inspired by a thread on Linux Questions Slackware forum
 "https://www.linuxquestions.org/questions/slackware-14/building-pgadmin-4-in-slackware-current-4175648889"
  
-This package use Python Virtual Environment, a script is included to create
+This package uses Python Virtual Environment, a script is included to create
 such environment, please see README.PVE file.
 
 
