@@ -33,14 +33,19 @@ the source of pgAdmin4 in file: SOURCE/pkg/linux/build-functions.sh.
  *) A directory for PVE is created under /usr/local: 
       PVE_ROOT = /usr/local/pve
  *) Under the above directory we create APP_PVE for pgAdmin4:
-      APP_PVE = /usr/local/pve/pgAdmin4-pve
+      APP_PVE = /usr/local/pve/pgAdmin4-pveXY
+      where XY are version number from pgAdmin4; example pgAdmin4 version 5.6
+      ends with: pgAdmin4-pve56
  *) Required packages are installed in APP_PVE directory; system Python 
     installation is NOT altered.
  *) This script will NOT update existing APP_PVE.
     PVE needs to be updated with new pgAdmin4 version; to upgrade or reinstall
     PVE do the following:
-        - As root delete APP_PVE with: "rm -rf /usr/local/pve/pgAdmin4-pve"
-        - Also as root run mk-pve.sh script.
+        - Run mk-pve.sh script.
+        - Build the package with: pgadmin4.SlackBuild
+        - Install or upgrade package with: installpkg / upgradepkg {your new pkg}
+        - Remove old APP_PVE with: "rm -rf /usr/local/pve/pgAdmin4-pve54"
+
  *) The python command "pip3 install ..." downloads python package(s) from the
     public Python Packaging Index, needs internet connection; which this script
     does NOT check for.
@@ -53,9 +58,9 @@ version 4.25 changes:
  *) psycopg2 module is included in the "requirements.txt" file now.
  
 version 5.0 changes:
-  *) APP_PVE get  the number "5" appended to the end, so version 4.30 and 5.0
+  *) APP_PVE get  the number "5" appended to the end, so version 4.30 and 5.6
      can coexist.
-      APP_PVE = /usr/local/pve/pgAdmin4-pve5
+      APP_PVE = /usr/local/pve/pgAdmin4-pve56
   *) IMHO, using nodeJS adds to your security risk. Use it at your own risk!
   
       

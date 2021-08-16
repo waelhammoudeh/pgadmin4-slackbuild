@@ -7,7 +7,7 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 5.4 on June 19/2021
+This SlackBuild is updated for pgAdmin4 version 5.6 on August 15/2021
 This script builds the "Desktop Application" only, no server code is
 included in the produced package.
 
@@ -19,7 +19,7 @@ quoted from new feature of the release notes. See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 5.4:
+Requirements for version 5.6:
  *) Nodejs version 12 or later.
  *) Yarn.
  *) PostgreSQL slackware package.
@@ -37,7 +37,7 @@ File list included in this directory:
  
 You also obviously need the source, get it from the link below
 
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.4/source/pgadmin4-5.4.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.6/source/pgadmin4-5.6.tar.gz
 
 Build Instructions:
 
