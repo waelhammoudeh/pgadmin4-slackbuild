@@ -1,5 +1,5 @@
 PRGNAM="pgAdmin4"
-VERSION="5.4"
+VERSION="5.6"
 HOMEPAGE="https://www.pgadmin.org"
 DOWNLOAD="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.6/source/pgadmin4-5.6.tar.gz"
 MD5SUM=""
