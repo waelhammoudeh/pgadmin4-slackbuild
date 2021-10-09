@@ -7,9 +7,8 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 5.6 on August 15/2021
-This script builds the "Desktop Application" only, no server code is
-included in the produced package.
+This SlackBuild is updated for pgAdmin4 version 6.0 on October 9/2021
+This script builds the "Desktop Application" only.
 
 Starting with version 5.0 developers "implemented runtime using NWjs to open
 pgAdmin4 in a standalone window instead of the system tray and web browser."
@@ -19,7 +18,7 @@ quoted from new feature of the release notes. See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 5.6:
+Requirements for version 6.0
  *) Nodejs version 12 or later.
  *) Yarn.
  *) PostgreSQL slackware package.
@@ -37,7 +36,7 @@ File list included in this directory:
  
 You also obviously need the source, get it from the link below
 
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v5.6/source/pgadmin4-5.6.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.0/source/pgadmin4-6.0.tar.gz
 
 Build Instructions:
 
@@ -46,17 +45,19 @@ Build Instructions:
 
  2) Initial Python Virtual Environment with "mk-pve.sh" script provided.
      * Note that I did not remove the prevoius pgadmin4-pve but added
-     * pgadmin4-pve54.
+     * two digit number to PVE directory ( pgadmin4-pve60 ).  If you are
+     * upgrading from earlier version, you should remove that earlier
+     * version PVE directory.
 
  3) Build the package with "pgadmin4.SlackBuild". You can find the built
     package in your /tmp directory.
  
- 4) Use Slackware package tool (installpkg or upgradepkg) to install in
-     your system.
+ 4) Use Slackware package tool (installpkg or upgradepkg) to install or
+     upgrade built package in your system.
 
 Important Note:
 
-This version (also 5.3, I did not try 5.2) starts with white clear window!
+This version (also earlier versions) starts with white blank window!
 No user interface is visibale. Resizing the window with the mouse (or hit F10
 function key) will make the application UI visibale.
 Another way to fix this issue is to change the setting in pgadmin.js file in the

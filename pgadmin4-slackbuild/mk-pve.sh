@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-# Python Virtual Environment updated for pgAdimin4 version 5.6
-# Date: August 15/2021
+# Python Virtual Environment updated for pgAdimin4 version 6.0
+# Date: October 9/2021
 # Author: Wael Hammoudeh - w_hammoudeh -at- hotmail dot com
 
 # This script is to create Python Virtual Environment for pgAdmin4.
@@ -16,7 +16,7 @@
 # Python Virtual Environment PVE_ROOT is created under /usr/local directory:
 # PVE_ROOT=/usr/local/pve
 # Application virtual environment directory under PVE_ROOT:
-# APP_PVE=/usr/local/pve/pgAdmin4-pve54
+# APP_PVE=/usr/local/pve/pgAdmin4-pve60
 # Script installs all required python packages plus "sphinx" - required to make
 # documentation.
 # If script finds APP_PVE directory, it exits and does nothing. So if you are
@@ -28,7 +28,7 @@
 # PVE name matches pgAdmin4 version, then use requirements.txt from that version
 
 PVE_ROOT=/usr/local/pve
-APP_PVE=$PVE_ROOT/pgAdmin4-pve56
+APP_PVE=$PVE_ROOT/pgAdmin4-pve60
 
 if [ -d $APP_PVE ]; then
   echo ""
@@ -88,7 +88,7 @@ CWD=$(pwd)
 # remove if left over
 rm -f requirements.txt
 
-# File requirements.txt was copied from pgAmin4 version 5.6 source tar ball
+# File requirements.txt was copied from pgAmin4 version 6.0 source tar ball
 
 install --mode=644 /dev/stdin "$CWD/requirements.txt" <<END
 ###############################################################################
@@ -217,10 +217,10 @@ rm $CWD/requirements.txt
 
 echo ""
 echo " All done :)"
-echo " This Python Virtual Environment is made for pgAdmin4."
-echo " The accompanied SlackBuild script builds the package under"
-echo " this virtual environment, in addition the resulting app"
-echo " is started under this virtual environment."
+echo " This Python Virtual Environment is made for pgAdmin4 version 6.0"
+echo " The accompanied SlackBuild script builds the package under this"
+echo " virtual environment, in addition the resulting app is started under"
+echo " this virtual environment."
 echo " To use virtual environment just source the script like:" 
 echo "   source $APP_PVE/bin/activate"
 echo " and to exit or terminate just issue:"

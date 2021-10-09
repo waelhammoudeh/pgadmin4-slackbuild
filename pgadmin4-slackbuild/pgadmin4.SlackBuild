@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-# Updated for pgAdmin4 version 5.4
+# Updated for pgAdmin4 version 6.0 on 10/9/2021
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -33,7 +33,7 @@
 
 CWD=$(pwd)
 PRG_NAME=pgadmin4
-VERSION=${VERSION:-5.6}
+VERSION=6.0
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -57,9 +57,9 @@ fi
 
 PKGLIB=$PKG/usr/lib${LIBDIRSUFFIX}/$PRG_NAME-$VERSION
 
-# path to python virtual environment for version 5.6
+# path to python virtual environment for version 6.0
 
-PVEPATH=/usr/local/pve/pgAdmin4-pve56
+PVEPATH=/usr/local/pve/pgAdmin4-pve60
 
 if [ ! -f $PVEPATH/bin/activate ]; then
   echo ""
@@ -123,7 +123,7 @@ fi
 if [ ! -x /usr/bin/yarn ]; then
 
     echo ""
-    echo "ERROR: missing yarn executable! pgAdmin4 version 5.4 requires yarn."
+    echo "ERROR: missing yarn executable! pgAdmin4 version 6.0 requires yarn."
     echo " Yarn build script is available from www.SlackBuilds.org, please"
     echo " install yarn then run this script again ):"
     echo ""
@@ -134,7 +134,7 @@ fi
 if [ ! -x /usr/bin/node ]; then
 
     echo ""
-    echo "ERROR: missing nodeJS executable! pgAdmin4 version 5.4 requires nodeJS 12+"
+    echo "ERROR: missing nodeJS executable! pgAdmin4 version 6.0 requires nodeJS 12+"
     echo " nodejs build script is available from www.SlackBuilds.org, please"
     echo " install nodejs then run this script again ):"
     echo ""
