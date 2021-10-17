@@ -1,6 +1,7 @@
-#!/bin/sh -e
+#!/bin/bash
 
-# Updated for pgAdmin4 version 6.0 on 10/9/2021
+# Updated for pgAdmin4 version 6.0
+# Date: October 16/2021
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -25,21 +26,15 @@
 
 # Modified by: Wael Hammoudeh - w_hammoudeh at hotmail.com
 
-# Please DO read the README.PVE file.
-
-# This script assumes the use of  Python Virtual Environment.
-# A script to initial PVE is provided in the file named "mk-pve.sh" along
-# with this script.
 
 CWD=$(pwd)
-PRG_NAME=pgadmin4
+PRGNAME=pgadmin4
 VERSION=6.0
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
 OUTPUT=${OUTPUT:-/tmp}
 TMP=${TMP:-/tmp/WH}
-PKG=$TMP/package-$PRG_NAME
 
 # call uname() to set ARCH
 if [ -z "$ARCH" ]; then
@@ -55,37 +50,7 @@ if [ "$ARCH" = "x86_64" ]; then
   LIBDIRSUFFIX="64"
 fi
 
-PKGLIB=$PKG/usr/lib${LIBDIRSUFFIX}/$PRG_NAME-$VERSION
-
-# path to python virtual environment for version 6.0
-
-PVEPATH=/usr/local/pve/pgAdmin4-pve60
-
-if [ ! -f $PVEPATH/bin/activate ]; then
-  echo ""
-  echo "Missing or wrong path to application Python Virtual Environment!"
-  echo " This slackware build script requires Python Virtual Environment."
-  echo " Use the provided script \"mk-pve.sh\" found with this script to"
-  echo " initial PVE on your system, and please see the README.PVE file."
-  echo " You can run this script afterward."
-  echo " Exiting!"
-  echo ""
-  exit 1;
-fi
-
-source $PVEPATH/bin/activate
-
-# Save and check return value from above!
-RET_VALUE=$?
-SUCCESS=0
-
-if [ $RET_VALUE -ne $SUCCESS ]; then
-    echo "ERROR: Could not activate Python Virtual Environment!"
-    echo "Make sure to run mk-pve.sh script to set it up."
-    echo "Exiting"
-    exit 1
-fi
-
+# we need postgresql bin directory in our path
 # check for postgresql package installation - bailout if not found.
 # Assume slackpkg use. Is postgresql package installed?
 PG_PKG=$(ls /var/lib/pkgtools/packages/postgresql*)
@@ -93,7 +58,7 @@ PG_PKG=$(ls /var/lib/pkgtools/packages/postgresql*)
 # empty string from ls command above indicates missing PostgreSQL package
 if [ -z "$PG_PKG" ]; then
     echo "PostgreSQL package not found. Please install PostgreSQL with"
-    echo "slackpkg. Exiting!"
+    echo "slackware package tools. Exiting!"
     exit 1;
 fi
 
@@ -103,23 +68,28 @@ PG_BIN_PART1=$(cat $PG_PKG | egrep "*/bin/pg_config")
 # empty string means missed up installation!
 if [ -z "$PG_BIN_PART1" ]; then
     echo "ERROR: Could not get path for PostgreSQL bin directory."
+    echo "Please make sure that PostgreSQL package is installed in"
+    echo "your system with slackware package tools"
     echo "Exiting!"
     exit 1;
 fi
 
 # prepend leading slash to directory
-SLASH=/
+PG_CONFIG=/$PG_BIN_PART1
 
 # with leading slash this is pg_config file which MUST exist in file system
-if [ ! -f "$SLASH$PG_BIN_PART1" ]; then
+if [ ! -f "$PG_CONFIG" ]; then
     echo "ERROR: Could not find postgresql pg_config configuration file."
     echo "Ensure that postgresql package is properly installed with slackware"
     echo "package tools. Exiting."
     exit 1
 fi
-# seems good postgresql package installation.
 
-# check yarn
+# seems good postgresql package installation. Make sure we get the right libpq
+PG_PATH=`dirname $PG_CONFIG`
+export PATH=$PG_PATH:$PATH
+
+# check yarn installation
 if [ ! -x /usr/bin/yarn ]; then
 
     echo ""
@@ -139,122 +109,97 @@ if [ ! -x /usr/bin/node ]; then
     echo " install nodejs then run this script again ):"
     echo ""
     exit 1
+
 fi
 
+# check nodeJS version, must be > 12
+VERSTR=`node --version`
+VERNUM=`echo $VERSTR | cut -c 1 --complement`
+MAJOR=`echo $VERNUM | cut -d "." -f 1`
+
+if [ $MAJOR -lt 12 ]; then
+    echo " ERROR: wrong nodeJS version, less than 12. pgAdmin4 requires nodeJS 12+"
+    echo " nodejs build script is available from www.SlackBuilds.org, please"
+    echo " install nodejs then run this script again ):"
+    echo ""
+    exit 1
+fi
+
+# exit on error
 set -e
 
-rm -rf $PKG $PKGLIB
+# Debugging shizz
+trap 'ERRCODE=$? && if [ ${ERRCODE} -ne 0 ]; then echo "The command \"${BASH_COMMAND}\" failed in \"${FUNCNAME}\" with exit code ${ERRCODE}."; fi' EXIT
 
-mkdir -p $TMP $PKG $PKGLIB $OUTPUT
+# make skelton directories for our package
+BUILDROOT=${TMP}/${PRGNAME}
+DESKTOPROOT=${BUILDROOT}/desktop
+METAROOT=${BUILDROOT}/meta
+SERVERROOT=${BUILDROOT}/server
+WEBROOT=${BUILDROOT}/web
 
-cd $TMP
+SOURCEDIR=${CWD}/${PRGNAME}-${VERSION}
 
-rm -rf $PRG_NAME-$VERSION
-tar xvzf $CWD/$PRG_NAME-$VERSION.tar.gz
+# start with empty directories
+rm -rf ${SOURCEDIR} ${BUILDROOT}
 
-cd $PRG_NAME-$VERSION
+mkdir -p $TMP $OUTPUT $BUILDROOT $DESKTOPROOT $METAROOT $SERVERROOT $WEBROOT
+
+tar xvzf $CWD/$PRGNAME-$VERSION.tar.gz
 
 # set sane permissions
-chown -R root:root .
+chown -R root:root ${SOURCEDIR}
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-# fix initial window not showing; this is inside function launchPgAdminWindow()
-# in file runtime/src/js/pgadmin.js
-# side effect is no zoom control; ctrl +, ctrl - and F10 do not work. Minimize then
-# maximize window restores those function. Also covering window with other
-# application (window) then setting focus to pgAdmin4 restores all functions.
-# Hitting F10 or resizing will draw window without the need for this sed line!
-sed -E "s|'show': false,|'show': true,|" -i runtime/src/js/pgadmin.js
+# patch _build_runtime() function to use pre-downloaded tar ball
+patch ${SOURCEDIR}/pkg/linux/build-functions.sh $CWD/nwjs-download.diff
 
-# we buil in runtime directory
-cd runtime
+# we use some functions provided by pgAdmin4 developers to build the package
+source ${SOURCEDIR}/pkg/linux/build-functions.sh
 
-yarn install --verbose
+# APP_NAME varaiable needed by _create_python_virtualenv() function
+APP_NAME=${PRGNAME}
 
-# do permissions again after yarn install.
-find -L . \
- \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
-  -o -perm 511 \) -exec chmod 755 {} \; -o \
- \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
-  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+_create_python_virtualenv "slackware"
 
-# docs are built in source root AND need python packages from PVE
+_build_runtime
 
-cd $TMP/$PRG_NAME-$VERSION
+# build temporary PVE to make docs
+$CWD/mk-doc-pve.sh $TMP
 
-make docs
-make install-node
-make bundle
+DOC_PVE=$TMP/docpve
+source $DOC_PVE/bin/activate
 
-mkdir -p $PKGLIB/docs/en_US
+_build_docs "slackware"
 
-cp -r runtime $PKGLIB
-cp -r web $PKGLIB
-cp -r docs/en_US/_build/html $PKGLIB/docs/en_US
+deactivate
 
-# remove not needed
-rm -rf $PKGLIB/web/regression
-rm -rf "$PKGLIB/docs/en_US/html/_sources"
+# done with temporary PVE, so we remove it
+rm -rf $DOC_PVE
 
-# remove __pycache__ and test(s) directories
-find $PKGLIB/web -name "__pycache__" -type d -print0 | xargs -0 rm -rf
-find $PKGLIB/web -name "tests" -type d -print0 | xargs -0 rm -rf
-find $PKGLIB/web -name "feature_tests" -type d -print0 | xargs -0 rm -rf
+_copy_code
 
-# needed config files
-install -Dm 644 /dev/stdin "$PKGLIB/web/config_distro.py" <<END
-SERVER_MODE = False
-HELP_PATH = "/usr/lib$LIBDIRSUFFIX/$PRG_NAME-$VERSION/docs/en_US/html"
-END
-cp $PKGLIB/web/config_distro.py $PKGLIB/web/config_local.py
-
-# we need to set paths in dev_config.json file
-install -Dm 644 /dev/stdin "$PKGLIB/runtime/dev_config.json" <<END
-{
-    "pythonPath": "$PVEPATH/bin/python3",
-    "pgadminFile": "/usr/lib$LIBDIRSUFFIX/$PRG_NAME-$VERSION/web/pgAdmin4.py"
-}
-END
-
-# Install icons - we are in source directory
-install -Dm 644 pkg/linux/$PRG_NAME-16x16.png \
-                "$PKG/usr/share/icons/hicolor/16x16/apps/$PRG_NAME.png"
-install -Dm 644 pkg/linux/$PRG_NAME-32x32.png \
-                "$PKG/usr/share/icons/hicolor/32x32/apps/$PRG_NAME.png"
-install -Dm 644 pkg/linux/$PRG_NAME-48x48.png \
-                "$PKG/usr/share/icons/hicolor/48x48/apps/$PRG_NAME.png"
-install -Dm 644 pkg/linux/$PRG_NAME-64x64.png \
-                "$PKG/usr/share/icons/hicolor/64x64/apps/$PRG_NAME.png"
-install -Dm 644 pkg/linux/$PRG_NAME-128x128.png \
-                "$PKG/usr/share/icons/hicolor/128x128/apps/$PRG_NAME.png"
-
-# install our script to start application
-START_SCRIPT=pgAdmin4-pve.sh
-install -Dm 755 $CWD/$START_SCRIPT $PKGLIB/runtime/$START_SCRIPT
-
-# use our start script in desktop file
-sed -E "s|Exec=/usr/pgadmin4/bin/pgadmin4|Exec=/usr/lib$LIBDIRSUFFIX/$PRG_NAME-$VERSION/runtime/$START_SCRIPT|" \
-       -i pkg/linux/pgadmin4.desktop
-
-install -Dm 644 pkg/linux/pgadmin4.desktop "$PKG/usr/share/applications/pgAdmin4.desktop"
+cp -r $SERVERROOT/usr/pgadmin4/ $DESKTOPROOT/usr/
 
 # save our build scripts
-mkdir -p $PKG/usr/doc/$PRG_NAME-$VERSION
-cp $CWD/LICENSE $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/README $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/README.PVE $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/$PRG_NAME.SlackBuild $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/pgAdmin4-pve.sh $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/mk-pve.sh $PKG/usr/doc/$PRG_NAME-$VERSION/
-cp $CWD/$PRG_NAME.info $PKG/usr/doc/$PRG_NAME-$VERSION/
+mkdir -p $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION
+cp $CWD/LICENSE $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
+cp $CWD/README $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
+cp $CWD/nwjs-download.diff $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
+cp $CWD/$PRGNAME.SlackBuild $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
+cp $CWD/mk-doc-pve.sh $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
+cp $CWD/$PRGNAME.info $DESKTOPROOT/usr/doc/$PRGNAME-$VERSION/
 
 # copy package description
-mkdir -p $PKG/install
-cat $CWD/slack-desc > $PKG/install/slack-desc
+mkdir -p $DESKTOPROOT/install
+cat $CWD/slack-desc > $DESKTOPROOT/install/slack-desc
 
-cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRG_NAME-$VERSION-$ARCH-$BUILD$TAG.tgz
+cd $DESKTOPROOT
+
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAME-$VERSION-$ARCH-$BUILD$TAG.tgz
+
+exit 0

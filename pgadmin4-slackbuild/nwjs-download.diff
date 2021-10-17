@@ -1,0 +1,31 @@
+--- /home/wael/pgAdmin4-tmp/pgadmin4-v6.0/pgadmin4-6.0/pkg/linux/build-functions.sh	2021-10-06 06:21:19.000000000 -0700
++++ /home/wael/build-functions-new.sh	2021-10-16 23:57:32.321372830 -0700
+@@ -129,14 +129,22 @@
+     # problem, so for the time being hardcoded the version to 0.55.0
+     # NW_VERSION=$(yarn info nw | grep latest | awk -F "'" '{ print $2}')
+     NW_VERSION="0.55.0"
++
++    # download tar ball first to scripts directory. Then just untar it. W.H
++    # pushd "${BUILDROOT}" > /dev/null
++    # while true;do
++    #        wget https://dl.nwjs.io/v${NW_VERSION}/nwjs-v${NW_VERSION}-linux-x64.tar.gz && break
++    #       rm nwjs-v${NW_VERSION}-linux-x64.tar.gz
++    #    done
++    #    tar -zxvf nwjs-v${NW_VERSION}-linux-x64.tar.gz
++    # popd > /dev/null
++    # WGET END
++
+     pushd "${BUILDROOT}" > /dev/null
+-        while true;do
+-            wget https://dl.nwjs.io/v${NW_VERSION}/nwjs-v${NW_VERSION}-linux-x64.tar.gz && break
+-            rm nwjs-v${NW_VERSION}-linux-x64.tar.gz
+-        done
+-        tar -zxvf nwjs-v${NW_VERSION}-linux-x64.tar.gz
++
++    tar -zxvf $CWD/nwjs-v${NW_VERSION}-linux-x64.tar.gz
++
+     popd > /dev/null
+-    # WGET END
+ 
+     # Copy nwjs into the staging directory
+     mkdir -p "${DESKTOPROOT}/usr/${APP_NAME}/bin"
