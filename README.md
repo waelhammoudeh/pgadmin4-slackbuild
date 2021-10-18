@@ -15,6 +15,14 @@ The python virtual environment is included within the package now. The build fun
 has been patched to use pre-downloaded "nwjs" tar ball; that is an added download but
 only done once.
 
+    A note about Slackware upgrading to python3 version 3.10.0:
+
+This program "pgAdmin4" uses python3 extensively, the python3 upgrade is for a
+major version - not a bug fix upgrade - the language changed here. It will take time
+for developers to change / fix code. I hope in 2 or 3 months pgAdmin4 will support
+python3 version 3.10.
+This build script was written and used with python3 version 3.9.7 installed.
+
 I hope somebody will find this script helpful.
 
 Wael Hammoudeh
