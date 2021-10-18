@@ -19,8 +19,8 @@ only done once.
 
 This program "pgAdmin4" uses python3 extensively, the python3 upgrade is for a
 major version - not a bug fix upgrade - the language changed here. It will take time
-for developers to change / fix code. I hope in 2 or 3 months pgAdmin4 will support
-python3 version 3.10.
+for developers to change / fix code. I hope that pgAdmin4 will support python3
+version 3.10 soon.
 This build script was written and used with python3 version 3.9.7 installed.
 
 I hope somebody will find this script helpful.
