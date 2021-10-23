@@ -7,7 +7,7 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 6.0 on October 16/2021
+This SlackBuild is updated for pgAdmin4 version 6.1 on October 22/2021
 This script builds the "Desktop Application" only.
 
 Starting with version 5.0 developers "implemented runtime using NWjs  - Node
@@ -19,7 +19,7 @@ See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 6.0
+Requirements for version 6.1
  *) Nodejs version 12 or later.
  *) Yarn.
  *) PostgreSQL slackware package.
@@ -28,16 +28,14 @@ Requirements for version 6.0
 File list included in this directory:
  1) LICENSE  
  2) README
- 3) mk-doc-pve.sh
- 4) pgadmin4.SlackBuild
- 5) slack-desc
- 6) pgadmin4.info
- 7) nwjs-download.diff
+ 3) pgadmin4.SlackBuild
+ 4) slack-desc
+ 5) pgadmin4.info
  
-You also need the source AND nwjs tar ball, get them from the links below.
+You also need the source AND nwjs tar balls, get them from the links below.
 
 pgAdmin4 source URL:
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.0/source/pgadmin4-6.0.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.1/source/pgadmin4-6.1.tar.gz
 
 nwjs source URL:
 https://dl.nwjs.io/v0.55.0/nwjs-v0.55.0-linux-x64.tar.gz
@@ -47,7 +45,7 @@ Build Instructions:
  1) Install required packages. Both Nodejs and Yarn are available from 
     www.slackbuilds.org, I suppose you have postgresql installed already. 
 
- 2) Download pgAdmin4 version 6.0 source AND nwjs version 0.55.0 tar ball
+ 2) Download pgAdmin4 version 6.1 source AND nwjs version 0.55.0 tar ball
     and place both in the same directory as the build script; URLs are in the info
     file and above.
 
@@ -57,12 +55,7 @@ Build Instructions:
  4) Use Slackware package tool (installpkg or upgradepkg) to install or
      or upgrade in your system.
 
-    Note: This new SlackBuild script uses linux build functions provided by the
-    developers and included with the source code. PVE is no longer used.
-    If you used my earlier build script, then you may remove PVE directory
-    from your /usr/local/pve directory.
 
 Enjoy.
 Wael Hammoudeh
-October 17/2021
-
+October 22/2021
