@@ -182,6 +182,7 @@ if test -d ${DIR_PYMODULES_PATH}; then
 fi
 
 # build runtime
+cd $CWD
 
 tar zxvf ${CWD}/nwjs-v${NW_VER}-linux-x64.tar.gz
 
