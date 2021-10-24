@@ -51,13 +51,18 @@ fi
 
 # we use two source files; do we have both?
 NW_VER="0.55.0"
+NW_NAME=nwjs-v${NW_VER}-linux-x64
+NW_DIR=${CWD}/${NW_NAME}
+
+SOURCEDIR=${CWD}/${PRGNAME}-${VERSION}
 
 if [ ! -f $CWD/${PRGNAME}-${VERSION}.tar.gz ]; then
     echo "Missing source for $PRGNAME. Exiting"
     exit 1
 fi
 
-if [ ! -f $CWD/nwjs-v${NW_VER}-linux-x64.tar.gz ]; then
+#if [ ! -f $CWD/nwjs-v${NW_VER}-linux-x64.tar.gz ]; then
+if [ ! -f $CWD/$NW_NAME.tar.gz ]; then
     echo "Missing source for nwJS tar ball. Exiting"
     exit 1
 fi
@@ -79,8 +84,6 @@ set -e
 # Debugging shizz
 trap 'ERRCODE=$? && if [ ${ERRCODE} -ne 0 ]; then echo "The command \"${BASH_COMMAND}\" failed in \"${FUNCNAME}\" with exit code ${ERRCODE}."; fi' EXIT
 
-SOURCEDIR=${CWD}/${PRGNAME}-${VERSION}
-
 # make skelton directories for our package -- also /usr/doc/$PRGNAME-$VERSION
 BUILDROOT=${TMP}/${PRGNAME}
 PKGROOT=${BUILDROOT}/opt/${PRGNAME}
@@ -91,7 +94,7 @@ PKGDOCS=${PKGROOT}/docs
 SYS_SHARE=${BUILDROOT}/usr/share
 
 # start with empty directories
-rm -rf ${SOURCEDIR} ${BUILDROOT}
+rm -rf ${SOURCEDIR} ${BUILDROOT} ${NW_DIR}
 
 mkdir -p $TMP $OUTPUT $BUILDROOT $PKGROOT $PKGBIN $PKGVENV $PKGWEB $PKGDOCS $SYS_SHARE
 
@@ -121,7 +124,7 @@ source ${PKGVENV}/bin/activate
 pip3 install --upgrade pip
 pip3 install wheel
 
-# Sphinx module is not included in Slackware, add it to requirements.txt file;
+# Sphinx module is not included in Slackware, add to requirements.txt file;
 # needed to build docs
 echo Sphinx >> ${SOURCEDIR}/requirements.txt
 
@@ -184,10 +187,18 @@ fi
 # build runtime
 cd $CWD
 
-tar zxvf ${CWD}/nwjs-v${NW_VER}-linux-x64.tar.gz
+tar zxvf ${CWD}/${NW_NAME}.tar.gz
+
+# set sane permissions
+chown -R root:root ${NW_DIR}
+find -L ${NW_DIR} \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 # Copy nwjs into PKGBIN directory
-cp -r ${CWD}/nwjs-v${NW_VER}-linux-x64/* ${PKGBIN}/
+cp -r ${NW_DIR}/* ${PKGBIN}/
 
 # rename nw to pgadmin4
 mv ${PKGBIN}/nw ${PKGBIN}/${PRGNAME}
