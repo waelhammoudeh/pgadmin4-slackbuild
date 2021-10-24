@@ -26,9 +26,6 @@
 
 # Modified by: Wael Hammoudeh - w_hammoudeh at hotmail.com
 
-# TODO: have staging / work directory where you place your unpacked sources /tmp/{srcs}
-# nodeJS version 12.16.1 was not good ... you need version > 12
-
 CWD=$(pwd)
 PRGNAME=pgadmin4
 VERSION="6.1"
@@ -55,9 +52,6 @@ fi
 # we use two source files; do we have both?
 NW_VER="0.55.0"
 NW_NAME=nwjs-v${NW_VER}-linux-x64
-NW_DIR=${CWD}/${NW_NAME}
-
-SOURCEDIR=${CWD}/${PRGNAME}-${VERSION}
 
 if [ ! -f $CWD/${PRGNAME}-${VERSION}.tar.gz ]; then
     echo "Missing source for $PRGNAME. Exiting"
@@ -73,7 +67,7 @@ fi
 PG_PATH=`/usr/bin/pg_config --bindir`
 
 if [ -z "$PG_PATH" ]; then
-    echo "Could not get postgresql binary directory from pg_config."
+    echo "Could not get postgresql binary directory from \"pg_config.\""
     echo "Is postgresql package installed? Exiting."
     exit 1
 fi
@@ -86,6 +80,11 @@ set -e
 # Debugging shizz
 trap 'ERRCODE=$? && if [ ${ERRCODE} -ne 0 ]; then echo "The command \"${BASH_COMMAND}\" failed in \"${FUNCNAME}\" with exit code ${ERRCODE}."; fi' EXIT
 
+# STAGE is where we unpack sources
+STAGE=$TMP/stage-$PRGNAME
+SOURCEDIR=${STAGE}/${PRGNAME}-${VERSION}
+NW_DIR=${STAGE}/${NW_NAME}
+
 # make skelton directories for our package -- also /usr/doc/$PRGNAME-$VERSION
 BUILDROOT=${TMP}/${PRGNAME}
 PKGROOT=${BUILDROOT}/opt/${PRGNAME}
@@ -96,9 +95,12 @@ PKGDOCS=${PKGROOT}/docs
 SYS_SHARE=${BUILDROOT}/usr/share
 
 # start with empty directories
-rm -rf ${SOURCEDIR} ${BUILDROOT} ${NW_DIR}
+rm -rf ${STAGE} ${BUILDROOT}
 
-mkdir -p $TMP $OUTPUT $BUILDROOT $PKGROOT $PKGBIN $PKGVENV $PKGWEB $PKGDOCS $SYS_SHARE
+mkdir -p $TMP $OUTPUT $STAGE $BUILDROOT $PKGROOT \
+               $PKGBIN $PKGVENV $PKGWEB $PKGDOCS $SYS_SHARE
+
+cd ${STAGE}
 
 tar xvzf $CWD/$PRGNAME-$VERSION.tar.gz
 
@@ -187,7 +189,8 @@ if test -d ${DIR_PYMODULES_PATH}; then
 fi
 
 # build runtime
-cd $CWD
+
+cd ${STAGE}
 
 tar zxvf ${CWD}/${NW_NAME}.tar.gz
 
@@ -205,7 +208,7 @@ cp -r ${NW_DIR}/* ${PKGBIN}/
 # rename nw to pgadmin4
 mv ${PKGBIN}/nw ${PKGBIN}/${PRGNAME}
 
-# copy from ${SOURCEDIR}/runtime the assets & src directories plus package.json file to PKGBIN
+# copy from ${SOURCEDIR}/runtime : assets & src directories plus package.json file to PKGBIN
 cp -rp ${SOURCEDIR}/runtime/assets ${PKGBIN}
 cp -rp ${SOURCEDIR}/runtime/src ${PKGBIN}
 cp ${SOURCEDIR}/runtime/package.json ${PKGBIN}/.

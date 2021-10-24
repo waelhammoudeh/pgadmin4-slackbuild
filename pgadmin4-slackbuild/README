@@ -20,7 +20,7 @@ Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
 Requirements for version 6.1
- *) Nodejs version 12 or later.
+ *) Nodejs version greater than 12.
  *) Yarn.
  *) PostgreSQL slackware package.
  *) Internet connection.
