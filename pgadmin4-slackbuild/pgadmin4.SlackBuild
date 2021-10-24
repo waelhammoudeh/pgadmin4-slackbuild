@@ -26,6 +26,9 @@
 
 # Modified by: Wael Hammoudeh - w_hammoudeh at hotmail.com
 
+# TODO: have staging / work directory where you place your unpacked sources /tmp/{srcs}
+# nodeJS version 12.16.1 was not good ... you need version > 12
+
 CWD=$(pwd)
 PRGNAME=pgadmin4
 VERSION="6.1"
