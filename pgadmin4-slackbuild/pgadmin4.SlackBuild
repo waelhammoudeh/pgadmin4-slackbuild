@@ -293,6 +293,7 @@ cp $CWD/slack-desc $MYDOC/
 
 mkdir -p $BUILDROOT/install
 cat $CWD/slack-desc > $BUILDROOT/install/slack-desc
+cat $CWD/doinst.sh  > $BUILDROOT/install/doinst.sh
 
 cd $BUILDROOT
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAME-$VERSION-$ARCH-$BUILD$TAG.txz

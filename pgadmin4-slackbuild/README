@@ -31,6 +31,7 @@ File list included in this directory:
  3) pgadmin4.SlackBuild
  4) slack-desc
  5) pgadmin4.info
+ 6) doinst.sh
  
 You also need the source AND nwjs tar balls, get them from the links below.
 
