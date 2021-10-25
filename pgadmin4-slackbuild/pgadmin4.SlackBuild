@@ -58,7 +58,7 @@ if [ ! -f $CWD/${PRGNAME}-${VERSION}.tar.gz ]; then
     exit 1
 fi
 
-if [ ! -f $CWD/$NW_NAME.tar.gz ]; then
+if [ ! -f $CWD/${NW_NAME}.tar.gz ]; then
     echo "Missing source for nwJS tar ball. Exiting"
     exit 1
 fi
@@ -86,25 +86,25 @@ SOURCEDIR=${STAGE}/${PRGNAME}-${VERSION}
 NW_DIR=${STAGE}/${NW_NAME}
 
 # make skelton directories for our package -- also /usr/doc/$PRGNAME-$VERSION
-BUILDROOT=${TMP}/${PRGNAME}
-PKGROOT=${BUILDROOT}/opt/${PRGNAME}
-PKGBIN=${PKGROOT}/bin
-PKGVENV=${PKGROOT}/venv
-PKGWEB=${PKGROOT}/web
-PKGDOCS=${PKGROOT}/docs
-SYS_SHARE=${BUILDROOT}/usr/share
+BUILDROOT=$TMP/$PRGNAME
+PKGROOT=$BUILDROOT/opt/$PRGNAME
+PKGBIN=$PKGROOT/bin
+PKGVENV=$PKGROOT/venv
+PKGWEB=$PKGROOT/web
+PKGDOCS=$PKGROOT/docs
+SYS_SHARE=$BUILDROOT/usr/share
 
 # start with empty directories
-rm -rf ${STAGE} ${BUILDROOT}
+rm -rf ${STAGE} $BUILDROOT
 
-mkdir -p $TMP $OUTPUT $STAGE $BUILDROOT $PKGROOT \
-               $PKGBIN $PKGVENV $PKGWEB $PKGDOCS $SYS_SHARE
+mkdir -p $TMP $OUTPUT ${STAGE} $BUILDROOT $PKGROOT \
+               $PKGBIN $PKGVENV $PKGWEB $PKGDOCS ${SYS_SHARE}
 
 cd ${STAGE}
 
-tar xvzf $CWD/$PRGNAME-$VERSION.tar.gz
+tar xvzf $CWD/${PRGNAME}-${VERSION}.tar.gz
 
-cd $SOURCEDIR
+cd ${SOURCEDIR}
 
 # set sane permissions
 chown -R root:root .
@@ -118,11 +118,11 @@ find -L . \
 
 echo "Creating the virtual environment..."
 
-cd ${PKGROOT}
+cd $PKGROOT
 
 # Create the blank venv -- in our PKGVENV directory
-python3 -m venv ${PKGVENV}
-source ${PKGVENV}/bin/activate
+python3 -m venv $PKGVENV
+source $PKGVENV/bin/activate
 
 # Make sure we have the wheel package present, as well as the latest pip
 pip3 install --upgrade pip
@@ -136,16 +136,17 @@ echo Sphinx >> ${SOURCEDIR}/requirements.txt
 pip3 install --no-cache-dir --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
 #pip3 install --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
 
-VENVPATH="/opt/${PRGNAME}/venv"
+VENVPATH="/opt/$PRGNAME/venv"
 
 # Fixup the paths in the venv activation scripts -- note double quets
-sed -i "s|VIRTUAL_ENV=.*|VIRTUAL_ENV=\"${VENVPATH}\"|g" venv/bin/activate
-sed -i "s|setenv VIRTUAL_ENV .*|setenv VIRTUAL_ENV \"${VENVPATH}\"|g" venv/bin/activate.csh
-sed -i "s|set -gx VIRTUAL_ENV .*|set -gx VIRTUAL_ENV \"${VENVPATH}\"|g" venv/bin/activate.fish
+sed -i "s|VIRTUAL_ENV=.*|VIRTUAL_ENV=\"$VENVPATH\"|g" venv/bin/activate
+sed -i "s|setenv VIRTUAL_ENV .*|setenv VIRTUAL_ENV \"$VENVPATH\"|g" venv/bin/activate.csh
+sed -i "s|set -gx VIRTUAL_ENV .*|set -gx VIRTUAL_ENV \"$VENVPATH\"|g" venv/bin/activate.fish
 
+# line below reduces package size a lot, we also KEEP Sphinx in venv
 rm -rf ${PKGVENV}/bin/__pycache__
 
-# Fixup hash bangs
+# Fixup hash bangs -- scripts in venv call their own python3
 sed -i 's/#!.*\/python3/#\!\/opt\/pgadmin4\/venv\/bin\/python3/g' venv/bin/*
 
 # Figure out some paths for use when completing the venv
@@ -195,8 +196,8 @@ cd ${STAGE}
 tar zxvf ${CWD}/${NW_NAME}.tar.gz
 
 # set sane permissions
-chown -R root:root ${NW_DIR}
-find -L ${NW_DIR} \
+chown -R root:root $NW_DIR
+find -L $NW_DIR \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
@@ -209,16 +210,16 @@ cp -r ${NW_DIR}/* ${PKGBIN}/
 mv ${PKGBIN}/nw ${PKGBIN}/${PRGNAME}
 
 # copy from ${SOURCEDIR}/runtime : assets & src directories plus package.json file to PKGBIN
-cp -rp ${SOURCEDIR}/runtime/assets ${PKGBIN}
-cp -rp ${SOURCEDIR}/runtime/src ${PKGBIN}
-cp ${SOURCEDIR}/runtime/package.json ${PKGBIN}/.
+cp -rp ${SOURCEDIR}/runtime/assets $PKGBIN
+cp -rp ${SOURCEDIR}/runtime/src $PKGBIN
+cp ${SOURCEDIR}/runtime/package.json $PKGBIN/.
 
-yarn --cwd ${PKGBIN} install --production=true
+yarn --cwd $PKGBIN install --production=true
 
-# pgadmin4 desktop needs files and executables from $SOURCEDIR/web directory
-cp -r ${SOURCEDIR}/web/ ${PKGROOT}
+# pgadmin4 desktop needs files and executables from ${SOURCEDIR}/web directory
+cp -r ${SOURCEDIR}/web/ $PKGROOT
 
-cd ${PKGWEB}
+cd $PKGWEB
 
 yarn install
 yarn run bundle
@@ -261,15 +262,15 @@ cp ${SOURCEDIR}/pkg/linux/setup-web.sh ${PKGWEB}/usr/bin/
 
 # Install icons
 install -Dm 644 ${SOURCEDIR}/pkg/linux/${PRGNAME}-16x16.png \
-                "$SYS_SHARE/icons/hicolor/16x16/apps/${PRGNAME}.png"
+                "${SYS_SHARE}/icons/hicolor/16x16/apps/${PRGNAME}.png"
 install -Dm 644 ${SOURCEDIR}/pkg/linux/${PRGNAME}-32x32.png \
-                "$SYS_SHARE/icons/hicolor/32x32/apps/${PRGNAME}.png"
+                "${SYS_SHARE}/icons/hicolor/32x32/apps/${PRGNAME}.png"
 install -Dm 644 ${SOURCEDIR}/pkg/linux/${PRGNAME}-48x48.png \
-                "$SYS_SHARE/icons/hicolor/48x48/apps/${PRGNAME}.png"
+                "${SYS_SHARE}/icons/hicolor/48x48/apps/${PRGNAME}.png"
 install -Dm 644 ${SOURCEDIR}/pkg/linux/${PRGNAME}-64x64.png \
-                "$SYS_SHARE/icons/hicolor/64x64/apps/${PRGNAME}.png"
+                "${SYS_SHARE}/icons/hicolor/64x64/apps/${PRGNAME}.png"
 install -Dm 644 ${SOURCEDIR}/pkg/linux/${PRGNAME}-128x128.png \
-                "$SYS_SHARE/icons/hicolor/128x128/apps/${PRGNAME}.png"
+                "${SYS_SHARE}/icons/hicolor/128x128/apps/${PRGNAME}.png"
 
 # fix path in desktop file
 sed -i 's/Exec=\/usr\/pgadmin4\/bin\/pgadmin4/Exec=\/opt\/pgadmin4\/bin\/pgadmin4/' \
@@ -278,12 +279,12 @@ install -Dm 644 "${SOURCEDIR}/pkg/linux/pgadmin4.desktop" \
                 "${SYS_SHARE}/applications/pgadmin4.desktop"
 
 # License files
-cp "${SOURCEDIR}/LICENSE" "${PKGROOT}/"
-cp "${SOURCEDIR}/DEPENDENCIES" "${PKGROOT}/"
-cp "${SOURCEDIR}/README.md" "${PKGROOT}/"
+cp ${SOURCEDIR}/LICENSE $PKGROOT/
+cp ${SOURCEDIR}/DEPENDENCIES $PKGROOT/
+cp ${SOURCEDIR}/README.md $PKGROOT/
 
 # save our build scripts
-MYDOC=$BUILDROOT/usr/doc/$PRGNAME-$VERSION
+MYDOC=$BUILDROOT/usr/doc/${PRGNAME}-${VERSION}
 mkdir -p $MYDOC
 cp $CWD/LICENSE $MYDOC/
 cp $CWD/README $MYDOC/
@@ -296,6 +297,6 @@ cat $CWD/slack-desc > $BUILDROOT/install/slack-desc
 cat $CWD/doinst.sh  > $BUILDROOT/install/doinst.sh
 
 cd $BUILDROOT
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAME-$VERSION-$ARCH-$BUILD$TAG.txz
+/sbin/makepkg -l y -c n ${OUTPUT}/${PRGNAME}-${VERSION}-${ARCH}-${BUILD}${TAG}.txz
 
 exit 0
