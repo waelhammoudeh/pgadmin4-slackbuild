@@ -13,13 +13,10 @@ The script was inspired by a thread on Linux Questions Slackware forum
 The build script in this repository has been restructured along with the package
 file system lay out, the package root directory now is under /opt directory.
 
-    A note about Slackware upgrading to python3 version 3.10.0:
+    A note about Slackware python3 version:
 
-This program "pgAdmin4" uses python3 extensively, the python3 upgrade is for a
-major version - not a bug fix upgrade - the language changed here. It will take time
-for developers to change / fix code. I hope that pgAdmin4 will support python3
-version 3.10 soon.
 This build script was written and used with python3 version 3.9.7 installed.
+No need to worry about python3 version 3.10 for now.
 
 I hope somebody will find this script helpful.
 
