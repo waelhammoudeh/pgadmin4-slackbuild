@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Updated for pgAdmin4 version 6.1
-# Date: October 22/2021
+# Updated for pgAdmin4 version 6.4
+# Date: January 13/2022
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="6.1"
+VERSION="6.4"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -49,8 +49,8 @@ if [ "$ARCH" = "x86_64" ]; then
   LIBDIRSUFFIX="64"
 fi
 
-# we use two source files; do we have both?
-NW_VER="0.55.0"
+# Pre-download nwjs; cut down build time.  Latest as of 1/13/2022 is ver. 0.60.0
+NW_VER="0.60.0"
 NW_NAME=nwjs-v${NW_VER}-linux-x64
 
 if [ ! -f $CWD/${PRGNAME}-${VERSION}.tar.gz ]; then
