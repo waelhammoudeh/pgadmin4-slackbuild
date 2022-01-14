@@ -14,10 +14,10 @@ The build script in this repository has been restructured along with the package
 file system layout, the package is installed under /opt directory.
 
 The info file "DOWNLOAD" line is NOT confirming to any standard! You may need
-to adjust your script - if use this - or edit the info file.
+to adjust your script - if you use this - or edit the info file.
 There are 2 lines with "DOWNLOAD1" and "DOWNLOAD2" prefixes.
 
 I hope somebody will find this script helpful.
 
 Wael Hammoudeh
-January 13/2021
+January 13/2022
