@@ -7,7 +7,7 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 6.4 on January 13/2022
+This SlackBuild is updated for pgAdmin4 version 6.7 on March 29/2022
 This script builds the "Desktop Application" only.
 
 Starting with version 5.0 developers "implemented runtime using NWjs  - Node
@@ -19,8 +19,8 @@ See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 6.4
- *) Nodejs version greater than 12.
+Requirements for version 6.7
+ *) Nodejs version > 12.
  *) Yarn.
  *) PostgreSQL slackware package.
  *) Internet connection.
@@ -36,17 +36,17 @@ File list included in this directory:
 You also need the source AND nwjs tar balls, get them from the links below.
 
 pgAdmin4 source URL:
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.4/source/pgadmin4-6.4.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.7/source/pgadmin4-6.7.tar.gz
 
 nwjs source URL:
-https://dl.nwjs.io/v0.60.0/nwjs-v0.60.0-linux-x64.tar.gz
+https://dl.nwjs.io/v0.61.0/nwjs-v0.61.0-linux-x64.tar.gz
 
 Build Instructions:
 
  1) Install required packages. Both Nodejs and Yarn are available from 
     www.slackbuilds.org, I suppose you have postgresql installed already. 
 
- 2) Download pgAdmin4 version 6.4 source AND nwjs version 0.60.0 tar balls
+ 2) Download pgAdmin4 version 6.7 source AND nwjs version 0.61.0 tar balls
     and place both in the same directory as the build script; URLs are in the info
     file and above.
 
@@ -59,4 +59,4 @@ Build Instructions:
 
 Enjoy.
 Wael Hammoudeh
-1/13/2022
+March 29th, 2022

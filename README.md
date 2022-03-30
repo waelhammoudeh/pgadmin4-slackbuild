@@ -4,7 +4,7 @@ pgAdmin 4
 pgAdmin4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This build script has been updated for pgAdmin4 version 6.4 on 1/13/2022
+This build script has been updated for pgAdmin4 version 6.7 on 3/29/2022
 
 This is a slackbuild script for building pgAdmin4 package for slackware.
 The script was inspired by a thread on Linux Questions Slackware forum
@@ -20,4 +20,4 @@ There are 2 lines with "DOWNLOAD1" and "DOWNLOAD2" prefixes.
 I hope somebody will find this script helpful.
 
 Wael Hammoudeh
-January 13/2022
+March 29th, 2022
