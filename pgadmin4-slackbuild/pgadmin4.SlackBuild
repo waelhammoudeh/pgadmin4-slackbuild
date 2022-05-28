@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Updated for pgAdmin4 version 6.7
-# Date: March 29 / 2022
+# Updated for pgAdmin4 version 6.9
+# Date: May 29 / 2022
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="6.7"
+VERSION="6.9"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -129,12 +129,6 @@ source $PKGVENV/bin/activate
 pip3 install --upgrade pip
 pip3 install wheel
 
-# function  safe_str_cmp() was removed from version 2.1 recently, force version before 2.1
-echo "Werkzeug<2.1" >> ${SOURCEDIR}/requirements.txt
-
-# force version jinja2==3.0.3 -- another python thing to force. I hate python.
-echo "jinja2==3.0.3" >> ${SOURCEDIR}/requirements.txt
-
 # Sphinx module is not included in Slackware, add to requirements.txt file;
 # needed to build docs
 echo Sphinx >> ${SOURCEDIR}/requirements.txt
@@ -221,7 +215,13 @@ cp -rp ${SOURCEDIR}/runtime/assets $PKGBIN
 cp -rp ${SOURCEDIR}/runtime/src $PKGBIN
 cp ${SOURCEDIR}/runtime/package.json $PKGBIN/.
 
+# to build pgadmin4 version 6.9:
+# upgraded yarn to version 1.22.19
+# --verbose option for initial build test
+# still build time was a lot longer than previous versions of pgadmin4
+
 yarn --cwd $PKGBIN install --production=true
+# yarn --cwd $PKGBIN install --verbose --production=true
 
 # pgadmin4 desktop needs files and executables from ${SOURCEDIR}/web directory
 cp -r ${SOURCEDIR}/web/ $PKGROOT
