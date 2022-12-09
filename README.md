@@ -4,13 +4,14 @@ pgAdmin 4
 pgAdmin4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This build script has been updated for pgAdmin4 version 6.14 on September 29 / 2022
+This build script has been updated for pgAdmin4 version 6.17 on December 8th / 2022
 
 **Note:** Nodejs and Yarn versions used to build package:
  - Nodejs version 18.7.0
  - Yarn version 1.22.19
 
-The build time was (40 minutes) unusually long for version 6.14 so you may want to build it overnight!
+Note: I used nwjs version "0.71.0", which is latest version available today at https://dl.nwjs.io/
+
 
 The pgAdmin4 executable uses Python3 Virtual Environment; this build script does
 NOT alter any of Slackware64 python3 installation.
@@ -30,4 +31,4 @@ I hope somebody will find this script helpful.
 
 Enjoy
  - Wael Hammoudeh
- - September 29/ 2022
+ - 12/8/2022
