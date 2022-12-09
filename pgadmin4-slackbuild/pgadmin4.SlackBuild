@@ -95,6 +95,8 @@ PKGWEB=$PKGROOT/web
 PKGDOCS=$PKGROOT/docs
 SYS_SHARE=$BUILDROOT/usr/share
 
+LIB_DIR=$BUILDROOT/usr/lib64/
+
 # start with empty directories
 rm -rf ${STAGE} $BUILDROOT
 
@@ -134,8 +136,8 @@ pip3 install wheel
 echo Sphinx >> ${SOURCEDIR}/requirements.txt
 
 # Install the requirements for venv
-pip3 install --no-cache-dir --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
-#pip3 install --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
+# pip3 install --no-cache-dir --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
+pip3 install --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
 
 VENVPATH="/opt/$PRGNAME/venv"
 
@@ -213,14 +215,15 @@ cp -rp ${SOURCEDIR}/runtime/src $PKGBIN
 cp ${SOURCEDIR}/runtime/package.json $PKGBIN/.
 
 # create links - few files get linked but those below
-ln -s $PKGBIN/lib/libffmpeg.so /usr/lib64/
-ln -s $PKGBIN/lib/libnode.so /usr/lib64/
-ln -s $PKGBIN/lib/libnw.so /usr/lib64/
-ln -s $PKGBIN/lib/libvk_swiftshader.so /usr/lib64/
-ln -s $PKGBIN/lib/vk_swiftshader_icd.json /usr/lib64/
+ln -s $PKGBIN/lib/libffmpeg.so $LIB_DIR
+ln -s $PKGBIN/lib/libnode.so $LIB_DIR
+ln -s $PKGBIN/lib/libnw.so $LIB_DIR
+ln -s $PKGBIN/lib/libvk_swiftshader.so $LIB_DIR
+ln -s $PKGBIN/lib/vk_swiftshader_icd.json $LIB_DIR
 
 # build it
-yarn cache clean & yarn --cwd $PKGBIN install --production=true
+# yarn cache clean & yarn --cwd $PKGBIN install --production=true
+yarn --cwd $PKGBIN install --production=true
 # yarn cache clean & yarn --cwd $PKGBIN install --verbose --production=true
 
 # pgadmin4 desktop needs files and executables from ${SOURCEDIR}/web directory
