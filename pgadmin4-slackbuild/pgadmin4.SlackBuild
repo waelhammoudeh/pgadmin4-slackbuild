@@ -214,16 +214,23 @@ cp -rp ${SOURCEDIR}/runtime/assets $PKGBIN
 cp -rp ${SOURCEDIR}/runtime/src $PKGBIN
 cp ${SOURCEDIR}/runtime/package.json $PKGBIN/.
 
-# create links - few files get linked but those below
-ln -s $PKGBIN/lib/libffmpeg.so $LIB_DIR
-ln -s $PKGBIN/lib/libnode.so $LIB_DIR
-ln -s $PKGBIN/lib/libnw.so $LIB_DIR
-ln -s $PKGBIN/lib/libvk_swiftshader.so $LIB_DIR
-ln -s $PKGBIN/lib/vk_swiftshader_icd.json $LIB_DIR
+# create links - few files get linked but those below.
+# another option is to add the nwjs library path to the system "ld path"
+# along with ldconfig. We keep the links for now.
+
+# make the link to installed files, not to those in build directory in /tmp
+# This should work.
+INSTAL_DIR=/opt/$PRGNAME
+
+ln -s $INSTAL_DIR/lib/libffmpeg.so $LIB_DIR
+ln -s $INSTAL_DIR/lib/libnode.so $LIB_DIR
+ln -s $INSTAL_DIR/lib/libnw.so $LIB_DIR
+ln -s $INSTAL_DIR/lib/libvk_swiftshader.so $LIB_DIR
+ln -s $INSTAL_DIR/lib/vk_swiftshader_icd.json $LIB_DIR
 
 # build it
-# yarn cache clean & yarn --cwd $PKGBIN install --production=true
-yarn --cwd $PKGBIN install --production=true
+yarn cache clean & yarn --cwd $PKGBIN install --production=true
+
 # yarn cache clean & yarn --cwd $PKGBIN install --verbose --production=true
 
 # pgadmin4 desktop needs files and executables from ${SOURCEDIR}/web directory

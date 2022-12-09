@@ -10,7 +10,7 @@ This build script has been updated for pgAdmin4 version 6.17 on December 8th / 2
  - Nodejs version 18.7.0
  - Yarn version 1.22.19
 
-Note: I used nwjs version "0.71.0", which is latest version available today at https://dl.nwjs.io/
+Note: I use nwjs version "0.71.0", which is the latest version available as of today at https://dl.nwjs.io/
 
 
 The pgAdmin4 executable uses Python3 Virtual Environment; this build script does
