@@ -29,5 +29,5 @@ There are 2 lines with "DOWNLOAD1" and "DOWNLOAD2" prefixes.
 
 I hope somebody will find this script helpful.
 
-Wael Hammoudeh
+Wael Hammoudeh  
 9/13/2023
