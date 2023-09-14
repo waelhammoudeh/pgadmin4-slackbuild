@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Slackware build script for pgadmin4
-#
-# Updated script for pgAdmin4 version 6.21
-# Date: March 13/2023
+# Script builds pgAdmin4 version 7.6
+# Date: September 13/2023
 
+# Slackware build script for pgadmin4
+# Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
+# All rights reserved.
+#
 # Redistribution and use of this script, with or without modification, is
 # permitted provided that the following conditions are met:
 #
@@ -26,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="6.21"
+VERSION="7.6"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -48,8 +50,8 @@ if [ "$ARCH" = "x86_64" ]; then
 fi
 
 # Pre-download nwjs; cut down build time.
-# latest version as of 12/8/2022 is 0.71.0
-NW_VER="0.72.0"
+# url: https://dl.nwjs.io/v0.77.0/nwjs-v0.77.0-linux-x64.tar.gz
+NW_VER="0.77.0"
 NW_NAME=nwjs-v${NW_VER}-linux-x64
 
 if [ ! -f $CWD/${PRGNAME}-${VERSION}.tar.gz ]; then
@@ -129,14 +131,18 @@ source $PKGVENV/bin/activate
 pip3 install --upgrade pip
 pip3 install wheel
 
+
 # Sphinx module is not included in Slackware, add to requirements.txt file;
 # needed to build docs, sphinxcontrib.youtube does not get installed?
+echo "" >> ${SOURCEDIR}/requirements.txt
 echo Sphinx >> ${SOURCEDIR}/requirements.txt
 echo sphinxcontrib.youtube >> ${SOURCEDIR}/requirements.txt
 
+
+
 # Install the requirements for venv
 # pip3 install --no-cache-dir --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
-pip3 install --no-binary psycopg2 -r ${SOURCEDIR}/requirements.txt
+pip3 install --no-cache-dir --no-binary psycopg -r ${SOURCEDIR}/requirements.txt
 
 VENVPATH="/opt/$PRGNAME/venv"
 
