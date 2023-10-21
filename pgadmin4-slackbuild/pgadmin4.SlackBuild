@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script builds pgAdmin4 version 7.6
-# Date: September 13/2023
+# Updated for pgAdmin4 version 6.17
+# Date: December 8th, 2022
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="7.6"
+VERSION="7.8"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -50,7 +50,7 @@ if [ "$ARCH" = "x86_64" ]; then
 fi
 
 # Pre-download nwjs; cut down build time.
-# url: https://dl.nwjs.io/v0.77.0/nwjs-v0.77.0-linux-x64.tar.gz
+# latest version as of 12/8/2022 is 0.71.0
 NW_VER="0.77.0"
 NW_NAME=nwjs-v${NW_VER}-linux-x64
 
@@ -234,9 +234,11 @@ ln -s $INSTAL_DIR/lib/libvk_swiftshader.so $LIB_DIR
 ln -s $INSTAL_DIR/lib/vk_swiftshader_icd.json $LIB_DIR
 
 # build it
-yarn cache clean & yarn --cwd $PKGBIN install --production=true
+# yarn cache clean & yarn --cwd $PKGBIN install --production=true
 
 # yarn cache clean & yarn --cwd $PKGBIN install --verbose --production=true
+
+yarn --cwd $PKGBIN install --production=true
 
 # pgadmin4 desktop needs files and executables from ${SOURCEDIR}/web directory
 cp -r ${SOURCEDIR}/web/ $PKGROOT

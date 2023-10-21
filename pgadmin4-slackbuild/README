@@ -7,7 +7,7 @@ You use the scripts included here at your OWN risk.
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 6.21 on March 13/2023
+This SlackBuild is updated for pgAdmin4 version 7.8 on October 20/2023
 This script builds the "Desktop Application" only.
 
 Starting with version 5.0 developers "implemented runtime using NWjs  - Node
@@ -19,9 +19,9 @@ See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 6.21
- *) Nodejs version > 12. -- version used for building 18.7.0
- *) Yarn. -- version used for building 1.22.19
+Requirements for version 7.8
+ *) Nodejs version > 12.0
+ *) Yarn.
  *) PostgreSQL slackware package.
  *) Internet connection.
   
@@ -36,19 +36,19 @@ File list included in this directory:
 You also need the source AND nwjs tar balls, get them from the links below.
 
 pgAdmin4 source URL:
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.21/source/pgadmin4-6.21.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v7.8/source/pgadmin4-7.8.tar.gz
 
 nwjs source URL:
-https://dl.nwjs.io/v0.72.0/nwjs-v0.72.0-linux-x64.tar.gz
+https://dl.nwjs.io/v0.77.0/nwjs-v0.77.0-linux-x64.tar.gz
 
 Build Instructions:
 
  1) Install required packages. Both Nodejs and Yarn are available from 
     www.slackbuilds.org, I suppose you have postgresql installed already. 
 
- 2) Download pgAdmin4 version 6.21 source AND nwjs version 0.72.0 tar balls
-    and place both in the same directory as the build script; URLs are in the info
-    file and above.
+ 2) Download source tar balls for pgAdmin4 AND nwjs and place both
+     in the same directory as the build script; URLs are in the info
+     file and above.
 
  3) Build the package with "pgadmin4.SlackBuild". You can find the built
     package in your /tmp directory.
@@ -59,4 +59,4 @@ Build Instructions:
 
 Enjoy.
 Wael Hammoudeh
-March 13th, 2023
+October 20th, 2023
