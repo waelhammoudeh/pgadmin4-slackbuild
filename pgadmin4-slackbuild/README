@@ -4,6 +4,8 @@ pgAdmin 4
 This is the README file for pgadmin4.SlackBuild script.
 You use the scripts included here at your OWN risk.
 
+VERSION # 8.2
+
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
@@ -19,7 +21,7 @@ See the release notes at:
 Using Node Webkit JavaScript brings new risks, new requirements and a lot of
 changes to this build script.
 
-Requirements for version 8.0
+Requirements for version 8.2
  *) Nodejs version > 12.0
  *) Yarn.
  *) PostgreSQL slackware package.
@@ -59,4 +61,4 @@ Build Instructions:
 
 Enjoy.
 Wael Hammoudeh
-November 26/ 2023
+01/29/2024
