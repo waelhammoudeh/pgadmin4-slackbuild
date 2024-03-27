@@ -9,7 +9,7 @@ VERSION # 8.2
 pgAdmin 4 is a rewrite of the popular pgAdmin3 management tool for the
 PostgreSQL (http://www.postgresql.org) database. 
 
-This SlackBuild is updated for pgAdmin4 version 8.0 on November 26/2023
+This SlackBuild is updated for pgAdmin4 version 8.2
 This script builds the "Desktop Application" only.
 
 Starting with version 5.0 developers "implemented runtime using NWjs  - Node
@@ -38,7 +38,7 @@ File list included in this directory:
 You also need the source AND nwjs tar balls, get them from the links below.
 
 pgAdmin4 source URL:
-https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v8.0/source/pgadmin4-8.0.tar.gz
+https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v8.2/source/pgadmin4-8.2.tar.gz
 
 nwjs source URL:
 https://dl.nwjs.io/v0.77.0/nwjs-v0.77.0-linux-x64.tar.gz
