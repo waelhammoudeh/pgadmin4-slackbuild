@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Updated for pgAdmin4 version 8.0
-# Date: Noverber 26/2023
+# Updated for pgAdmin4 version 8.9
+# Date: July 7/2024
+
+# Note: this requires nodejs version : ^18.18.0 || ^20.9.0 || >= 21.1.0
+# to build the documentations; version used was == 21.1.0
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +31,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="8.2"
+VERSION="8.9"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
