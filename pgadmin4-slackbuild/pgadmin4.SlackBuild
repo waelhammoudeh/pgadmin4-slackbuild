@@ -143,7 +143,8 @@ echo "sphinx>=4.0,<6.0" >> ${SOURCEDIR}/requirements.txt
 echo "sphinxcontrib.youtube" >> ${SOURCEDIR}/requirements.txt
 
 # Install the requirements for venv
-pip3 install --no-cache-dir --no-binary psycopg -r ${SOURCEDIR}/requirements.txt 2>&1 | tee pip-install.log
+pip3 install --no-cache-dir --no-binary psycopg -r ${SOURCEDIR}/requirements.txt
+# 2>&1 | tee pip-install.log
 
 # append to line above to create log: 2>&1 | tee pip-install.log
 
