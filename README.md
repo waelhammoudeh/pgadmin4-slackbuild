@@ -1,37 +1,53 @@
-pgAdmin 4
+PgAdmin 4
 =========
 
-pgAdmin4 is a rewrite of the popular pgAdmin3 management tool for the
-PostgreSQL (http://www.postgresql.org) database. 
+Slackware64 build script for the Desktop part of pgAdmin4.
 
-This build script has been updated to build pgAdmin4 version 8.9 on July 7/2024
+Use the script included here at your OWN risk.
 
-**Note:** Nodejs and Yarn versions used to build package:
- - Nodejs version 21.1.0
- - Yarn version 1.22.19
+VERSION # 9.4
 
-Note: use nwjs version "0.77.0" from https://dl.nwjs.io/
+pgAdmin 4 is written as a web application with Python(Flask) on the server side
+and ReactJS, HTML5 with CSS for the client side processing and UI.
+
+Although developed using web technologies, pgAdmin 4 can be deployed either on
+a web server using a browser, or standalone on a workstation. The runtime/
+subdirectory contains an Electron based runtime application intended to allow this,
+which will fork a Python server process and display the UI.
+
+This script builds the desktop only!!!
+
+Requirements:
+ *) Nodejs version >= 20.0.0
+ *) Yarn.
+ *) PostgreSQL slackware package.
+ *) Internet connection.
+
+File list included in this directory:
+ 1) LICENSE
+ 2) README
+ 3) pgadmin4.SlackBuild
+ 4) slack-desc
+ 5) pgadmin4.info
+ 6) doinst.sh
 
 NOTE:
-PgAdmin4 version 8.9 requires "node" version: 18.18.0 || 20.9.0 || >= 21.1.0
-Upgraded "node" to version 21.1.0 using Willy's script from https://slackbuilds.org/
+Upgraded "nodejs" to version 21.1.0 using Willy's script from SlackBuild.org
 
-The pgAdmin4 executable uses Python3 Virtual Environment; this build script does
-NOT alter any of Slackware64 python3 installation.
+Build Instructions:
 
-This is a slackbuild script for building pgAdmin4 package for slackware.
-The script was inspired by a thread on Linux Questions Slackware forum
-"https://www.linuxquestions.org/questions/slackware-14/building-pgadmin-4-in-slackware-current-4175648889"
- 
-The build script in this repository has been restructured along with the package
-file system layout, the package is installed under /opt directory.
+ 1) Install required packages. Both Nodejs and Yarn are available from
+    www.slackbuilds.org, I suppose you have postgresql installed already.
 
-The info file "DOWNLOAD" line is NOT confirming to any standard! You may need
-to adjust your script - if you use this - or edit the info file.
-There are 2 lines with "DOWNLOAD1" and "DOWNLOAD2" prefixes.
+ 2) Download source tar ball for pgAdmin4 AND electron zipped file and place both
+     in the same directory as the build script; URLs are in the info file.
 
-I hope somebody will find this script helpful.
+ 3) Build the package with "pgadmin4.SlackBuild". You can find the built
+    package in your /tmp directory.
 
-Wael Hammoudeh  
+ 4) Use Slackware package tool (installpkg or upgradepkg) to install or
+     upgrade in your system.
 
-07/07/2024
+Wael Hammoudeh
+
+June 11/2025
