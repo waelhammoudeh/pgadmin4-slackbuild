@@ -4,7 +4,7 @@ PgAdmin 4
 This is the README file for pgadmin4.SlackBuild script.
 Use the script included here at your OWN risk.
 
-VERSION # 9.4
+VERSION # 9.5
 
 pgAdmin 4 is written as a web application with Python(Flask) on the server side
 and ReactJS, HTML5 with CSS for the client side processing and UI.
@@ -49,4 +49,4 @@ Build Instructions:
 
 Enjoy.
 Wael Hammoudeh
-June 11/2025
+July 1st/2025

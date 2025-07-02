@@ -5,7 +5,7 @@ Slackware64 build script for the Desktop part of pgAdmin4.
 
 Use the script included here at your OWN risk.
 
-VERSION # 9.4
+VERSION # 9.5
 
 pgAdmin 4 is written as a web application with Python(Flask) on the server side
 and ReactJS, HTML5 with CSS for the client side processing and UI.
@@ -50,4 +50,4 @@ Build Instructions:
 
 Wael Hammoudeh
 
-June 11/2025
+July 1/2025

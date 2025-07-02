@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Updated for pgAdmin4 version 9.4
-# Date: June/11/2025
+# Updated for pgAdmin4 version 9.5
+# Date: July/01/2025
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="9.4"
+VERSION="9.5"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -93,16 +93,15 @@ PKGROOT=$BUILDROOT/opt/$PRGNAME
 PKGBIN=$PKGROOT/bin
 PKGVENV=$PKGROOT/venv
 PKGWEB=$PKGROOT/web
+PKGMETA=$PKGROOT/meta
 PKGDOCS=$PKGROOT/docs
 SYS_SHARE=$BUILDROOT/usr/share
 
-LIB_DIR=$BUILDROOT/usr/lib64/
-
 # start with empty directories
-rm -rf ${STAGE} $BUILDROOT
+rm -rf ${STAGE} ${BUILDROOT}
 
-mkdir -p $TMP $OUTPUT ${STAGE} $BUILDROOT $PKGROOT \
-               $PKGBIN $PKGVENV ${SYS_SHARE} ${LIB_DIR}
+mkdir -p $TMP $OUTPUT $STAGE $BUILDROOT $PKGROOT \
+               $PKGBIN $PKGVENV $SYS_SHARE $PKGMETA
 
 # PKGWEB=$PKGROOT/web directory will be copied from source below!
 
@@ -137,14 +136,14 @@ pip3 install --upgrade pip
 pip3 install wheel
 
 # Sphinx module is not included in Slackware, add to requirements.txt file;
-# needed to build docs, sphinxcontrib.youtube does not get installed?
+# needed to build docs, sphinxcontrib.youtube does not get installed?!
 echo "" >> ${SOURCEDIR}/requirements.txt
 echo "sphinx>=4.0,<6.0" >> ${SOURCEDIR}/requirements.txt
 echo "sphinxcontrib.youtube" >> ${SOURCEDIR}/requirements.txt
 
 # Install the requirements for venv
-pip3 install --no-cache-dir --no-binary psycopg -r ${SOURCEDIR}/requirements.txt
-# 2>&1 | tee pip-install.log
+
+pip3 install --no-cache-dir --no-binary psycopg,gssapi -r "${SOURCEDIR}/requirements.txt"
 
 # append to line above to create log: 2>&1 | tee pip-install.log
 
@@ -233,8 +232,7 @@ cp "${SOURCEDIR}/runtime/.yarnrc.yml" "${PKGBIN}/resources/app"
 
 cd "${PKGBIN}/resources/app"
 yarn set version berry
-yarn set version 3
-yarn plugin import workspace-tools
+yarn set version 4
 yarn workspaces focus --production
 
 # remove the yarn cache
@@ -275,7 +273,7 @@ cd ${SOURCEDIR}/docs/en_US
 # python3 ${PKGVENV}/bin/sphinx-build . "${PKGDOCS}/en_US/html"
 # END docs build from pgadmin4 version 8.9
 
-# START docs build from pgadmin4 version 9.4
+# START docs build from pgadmin4 version 9.5
 SYSTEM_PYTHON_PATH='/usr/bin/python3.9'
 python3 build_code_snippet.py
 SYS_PYTHONPATH=$("${SYSTEM_PYTHON_PATH}" -c "import sys; print(':'.join([p for p in sys.path if p]))")
@@ -286,10 +284,15 @@ PYTHONPATH=$PYTHONPATH:${SYS_PYTHONPATH} python3 -msphinx . "${PKGDOCS}/en_US/ht
 # Start copying
 cd "${SOURCEDIR}/web"
 
+# remove "git log" call in "package.json" file
+sed -i   's/yarn run bundle:dev && yarn run git:hash",/yarn run bundle:dev",/' ${SOURCEDIR}/web/package.json
+
 yarn set version berry
-yarn set version 3
+yarn set version 4
 yarn install
-yarn run bundle:dev
+yarn run bundle
+
+# yarn run bundle:dev
 # 2>&1 | tee yarn-run-bundle.log
 
 cp -r "${SOURCEDIR}/web" "${PKGROOT}/"
