@@ -49,6 +49,23 @@ if [ "$ARCH" = "x86_64" ]; then
   LIBDIRSUFFIX="64"
 fi
 
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+# we do not set any compiler flags now; it might be useful in the future!
+# CFLAGS="$SLKCFLAGS" CXXFLAGS="$SLKCFLAGS"
+
 # Pre-download electron zipped file AND source tar ball
 ELEC_VER="35.4.0"
 ELEC_NAME=electron-v${ELEC_VER}-linux-x64
@@ -266,13 +283,6 @@ PKGDOCS=$PKGROOT/docs
 mkdir -p ${PKGDOCS}/en_US/html
 cd ${SOURCEDIR}/docs/en_US
 
-# Docs can be built in either ways below:
-
-# START docs build from pgadmin4 version 8.9 (2 lines total!)
-# python3 build_code_snippet.py
-# python3 ${PKGVENV}/bin/sphinx-build . "${PKGDOCS}/en_US/html"
-# END docs build from pgadmin4 version 8.9
-
 # START docs build from pgadmin4 version 9.5
 SYSTEM_PYTHON_PATH='/usr/bin/python3.9'
 python3 build_code_snippet.py
@@ -284,16 +294,14 @@ PYTHONPATH=$PYTHONPATH:${SYS_PYTHONPATH} python3 -msphinx . "${PKGDOCS}/en_US/ht
 # Start copying
 cd "${SOURCEDIR}/web"
 
-# remove "git log" call in "package.json" file
-sed -i   's/yarn run bundle:dev && yarn run git:hash",/yarn run bundle:dev",/' ${SOURCEDIR}/web/package.json
+# remove "git log" call in "package.json" file by faking it!
+echo "e9319b07fa935f8e7ed6e122b0eccf3b8f73f04d 2025-07-01" > fake-git.hash
+sed -i 's/git log -1 --format=\\"%H %as\\"/cat fake-git.hash/' ${SOURCEDIR}/web/package.json
 
 yarn set version berry
 yarn set version 4
 yarn install
 yarn run bundle
-
-# yarn run bundle:dev
-# 2>&1 | tee yarn-run-bundle.log
 
 cp -r "${SOURCEDIR}/web" "${PKGROOT}/"
 
@@ -304,11 +312,8 @@ find . -name "tests" -type d -print0 | xargs -0 rm -rf
 find . -name "feature_tests" -type d -print0 | xargs -0 rm -rf
 find . -name "__pycache__" -type d -print0 | xargs -0 rm -rf
 
-# needed config files
-install -Dm 644 /dev/stdin "${PKGROOT}/web/config_distro.py" <<END
-SERVER_MODE = False
-HELP_PATH = "/opt/pgadmin4/docs/en_US/html"
-END
+# copy config_distro.py file
+cp $CWD/config_distro.py ${PKGROOT}/web/
 
 # Web setup script -- you are on your own for this
 mkdir -p ${PKGROOT}/web/usr/bin/
