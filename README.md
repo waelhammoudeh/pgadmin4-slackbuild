@@ -19,8 +19,11 @@ This script builds the desktop only!!!
 
 Requirements:
  *) Nodejs version >= 20.0.0
+
  *) Yarn.
+
  *) PostgreSQL slackware package.
+
  *) Internet connection.
 
 File list included in this directory:
@@ -30,9 +33,11 @@ File list included in this directory:
  4) slack-desc
  5) pgadmin4.info
  6) doinst.sh
+ 7) config_distro.py
 
 NOTE:
 Upgraded "nodejs" to version 21.1.0 using Willy's script from SlackBuild.org
+(modified version number from 20.19.3 to 21.1.0)
 
 Build Instructions:
 
@@ -50,4 +55,4 @@ Build Instructions:
 
 Wael Hammoudeh
 
-July 1/2025
+updated on July 21/2025
