@@ -18,6 +18,7 @@ which will fork a Python server process and display the UI.
 This script builds the desktop only!!!
 
 Requirements:
+
  *) Nodejs version >= 20.0.0
 
  *) Yarn.
