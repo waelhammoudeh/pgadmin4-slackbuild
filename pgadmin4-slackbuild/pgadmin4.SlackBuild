@@ -315,7 +315,7 @@ find . -name "__pycache__" -type d -print0 | xargs -0 rm -rf
 # copy config_distro.py file
 cp $CWD/config_distro.py ${PKGROOT}/web/
 
-# Web setup script -- you are on your own for this
+# Web setup script -- see my guide in SETUP-SERVER.md
 mkdir -p ${PKGROOT}/web/usr/bin/
 cp ${SOURCEDIR}/pkg/linux/setup-web.sh ${PKGROOT}/web/usr/bin/
 
