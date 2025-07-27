@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Updated for pgAdmin4 version 9.5
-# Date: July/01/2025
+# Updated for pgAdmin4 version 9.6
+# Date: July/27/2025
 
 # Slackware build script for pgadmin4
 # Copyright 2019 Jeremy Hansen jebrhansen+SBo -at- gmail.com
@@ -28,7 +28,7 @@
 
 CWD=$(pwd)
 PRGNAME=pgadmin4
-VERSION="9.5"
+VERSION="9.6"
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wh}
 
@@ -294,10 +294,6 @@ PYTHONPATH=$PYTHONPATH:${SYS_PYTHONPATH} python3 -msphinx . "${PKGDOCS}/en_US/ht
 # Start copying
 cd "${SOURCEDIR}/web"
 
-# remove "git log" call in "package.json" file by faking it!
-echo "e9319b07fa935f8e7ed6e122b0eccf3b8f73f04d 2025-07-01" > fake-git.hash
-sed -i 's/git log -1 --format=\\"%H %as\\"/cat fake-git.hash/' ${SOURCEDIR}/web/package.json
-
 yarn set version berry
 yarn set version 4
 yarn install
@@ -315,7 +311,7 @@ find . -name "__pycache__" -type d -print0 | xargs -0 rm -rf
 # copy config_distro.py file
 cp $CWD/config_distro.py ${PKGROOT}/web/
 
-# Web setup script -- see my guide in SETUP-SERVER.md
+# Web setup script -- you are on your own for this
 mkdir -p ${PKGROOT}/web/usr/bin/
 cp ${SOURCEDIR}/pkg/linux/setup-web.sh ${PKGROOT}/web/usr/bin/
 

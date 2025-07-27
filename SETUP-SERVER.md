@@ -4,14 +4,14 @@ This guide explains how to setup and run **pgAdmin4 in server mode** on a local
 network composed primarily of Slackware64 systems, with some Windows and macOS
 machines. All machines use static IPs and share a common `/etc/hosts` file.
 
-## Important Notes
+#### Important Notes
 
  PgAdmin4 can run in **Desktop** *or* **Server** mode, but **not both at the same time**.
  Server mode allows access from any browser on your local network.
 
 ---
 
-## 1. Create pgadmin User and Group
+#### 1. Create pgadmin User and Group
 
 A dedicated system user and group is used to run the server. Run as `root`:
 
@@ -20,7 +20,7 @@ A dedicated system user and group is used to run the server. Run as `root`:
   # useradd -r -u 990 -g pgadmin -d /opt/pgadmin4/srvr-data -s /bin/bash pgadmin
 ```
 
-## 2. Create Data Directory
+#### 2. Create Data Directory
 
 By default pgAdmin4 stores server data under the system directory "/var/lib/".
 I prefer to keep ALL pgAdmin4 files and directories under my package root
@@ -31,7 +31,7 @@ I prefer to keep ALL pgAdmin4 files and directories under my package root
   # chown pgadmin:pgadmin /opt/pgadmin4/srvr-data
 ```
 
-## 3. Enable Server Mode
+#### 3. Enable Server Mode
 
 Copy my `config_local.py` file to the pgAdmin4 `web` directory:
 
@@ -70,7 +70,7 @@ mode and switch back to Desktop mode , remove the file or hide it:
   # mv /opt/pgadmin4/web/config_local.py /opt/pgadmin4/web/config_local.py.disable
 ```
 
-## 4. Setup Server database:
+#### 4. Setup Server database:
 
 Source provided script "setup.py" is used to setup the server database, this
 script will use our "config_local.py" file to setup initial server database, we
@@ -99,7 +99,7 @@ The email identifies the user (first one becomes admin).
 The "steup.py" script is used to adminstrate the server; try "steup.py --help"
 to see all options.
 
-## 5. Run the Server
+#### 5. Run the Server
 
 With this setup, you can start the server from your terminal with:
 
@@ -137,7 +137,7 @@ Slackware includes the Apache HTTP server, an external Apache module is required
 that is "mod_wsgi" which needs to be installed. Luckily it has a build script available
 at www.slackbuilds.org.
 
-# Install "mod_wsgi" module:
+#### Install "mod_wsgi" module:
 
 I have made two changes to the build script explained below. Download the build
 script from this [link here](https://slackbuilds.org/repository/15.0/network/mod_wsgi/).
@@ -171,13 +171,13 @@ Add to /etc/httpd/httpd.conf:
   Include /etc/httpd/extra/mod_wsgi.conf
 ```
 
-# Make pgAdmin4.py Executable
+#### Make pgAdmin4.py Executable
 
 ```
   # chmod +x /opt/pgadmin4/web/pgAdmin4.py
 ```
 
-# Apache VirtualHost Example
+#### Apache VirtualHost Configuration
 
 Add this block to a custom Apache config file (e.g., /etc/httpd/extra/pgadmin.conf) and include it from httpd.conf.
 

@@ -4,7 +4,7 @@ PgAdmin 4
 This is the README file for pgadmin4.SlackBuild script.
 Use the script included here at your OWN risk.
 
-VERSION # 9.5
+VERSION # 9.6
 
 pgAdmin 4 is written as a web application with Python(Flask) on the server side
 and ReactJS, HTML5 with CSS for the client side processing and UI.
@@ -14,7 +14,8 @@ a web server using a browser, or standalone on a workstation. The runtime/
 subdirectory contains an Electron based runtime application intended to allow this,
 which will fork a Python server process and display the UI.
 
-This script builds the desktop only!!!
+This script builds the desktop only. For server setup see SETUP-SERVER.md in this
+repository.
 
 Requirements:
  *) Nodejs version >= 20.0.0
@@ -29,6 +30,7 @@ File list included in this directory:
  4) slack-desc
  5) pgadmin4.info
  6) doinst.sh
+ 7) config_distro.py
 
 NOTE:
 Upgraded "nodejs" to version 21.1.0 using Willy's script from SlackBuild.org
@@ -49,4 +51,4 @@ Build Instructions:
 
 Enjoy.
 Wael Hammoudeh
-July 1st/2025
+July 27/2025
