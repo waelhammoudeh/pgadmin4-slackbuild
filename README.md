@@ -1,7 +1,7 @@
 PgAdmin 4
 =========
 
-Slackware64 build script for the Desktop part of pgAdmin4.
+Slackware64 build script for pgAdmin4 program.
 
 Use the script included here at your OWN risk.
 
@@ -15,13 +15,16 @@ a web server using a browser, or standalone on a workstation. The runtime/
 subdirectory contains an Electron based runtime application intended to allow this,
 which will fork a Python server process and display the UI.
 
-This script builds the desktop only. To setup pgAdmin4 Server, see SETUP-SERVER.md.
+This script builds the desktop only.
+
+To setup pgAdmin4 Server, see guide in SETUP-SERVER.md
 
 Requirements:
- *) Nodejs version >= 20.0.0
- *) Yarn.
- *) PostgreSQL slackware package.
- *) Internet connection.
+
+ - Nodejs version >= 20.0.0
+ - Yarn.
+ - PostgreSQL slackware package.
+ - Internet connection.
 
 File list included in pgadmin4-slackbuild directory:
  1) LICENSE
