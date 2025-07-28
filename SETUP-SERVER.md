@@ -109,13 +109,13 @@ With this setup, you can start the server from your terminal with:
 
 This is the output I get from the above command on my terminal:
 
-```
+<pre>
   (venv) pgadmin@yafa:/root$ python3 /opt/pgadmin4/web/pgAdmin4.py
   Starting pgAdmin 4. Please navigate to http://192.168.1.5:5050 in your browser.
    * Serving Flask app 'pgadmin'
    * Debug mode: off
 
- ```
+</pre>
 
  You may access the server from any machine on your LAN (including the machine
  your are using now) by entering the URL into your browser.
@@ -130,6 +130,7 @@ You may run your server in the background:
 
 note its PID, then to stop it use `kill -9 PID` when done.
 
+If you restart the server again do not forget to run it in our python virtual environment.
 
 ### PgAdmin4 Behind Apache Using mod_wsgi module:
 
@@ -179,9 +180,13 @@ Add to /etc/httpd/httpd.conf:
 
 #### Apache VirtualHost Configuration
 
-Add this block to a custom Apache config file (e.g., /etc/httpd/extra/pgadmin.conf) and include it from httpd.conf.
+Add this block to a custom Apache config file (e.g., /etc/httpd/extra/httpd-pgadmin.conf) and include it from
+your main "/etc/httpd/httpd.conf" file.
 
 ```
+# Apache config for my pgAdmin4 Server
+# Requires "mod_wsgi" module; loaded in our main configure file.
+
 <VirtualHost *:80>
 
     ServerName www.pgadmin.local
@@ -231,6 +236,11 @@ Add this block to a custom Apache config file (e.g., /etc/httpd/extra/pgadmin.co
 </VirtualHost>
 ```
 
+Here is my include line in my main "/etc/httpd/httpd.conf" file:
+```
+  Include /etc/httpd/extra/httpd-pgadmin.conf
+```
+
 You may want to add the local hostname/IP to "/etc/hosts" on client machines:
 
 ```
@@ -251,7 +261,11 @@ or use the IP directly:
 http://192.168.1.5/
 ```
 
+If you decide to go back to desktop mode, comment your include line in main httpd.conf file
+in addition to renaming (hiding) config_local.py file.
+
 Enjoy
 
 Wael Hammoudeh
-July 26/2025
+
+July 28/2025
