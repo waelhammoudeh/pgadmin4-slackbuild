@@ -1,8 +1,8 @@
 PRGNAM="pgAdmin4"
-VERSION="9.6"
+VERSION="9.15"
 HOMEPAGE="https://www.pgadmin.org"
-DOWNLOAD="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.6/source/pgadmin4-9.6.tar.gz \
-          https://github.com/electron/electron/releases/download/v35.4.0/electron-v35.4.0-linux-x64.zip"
+DOWNLOAD="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.15/source/pgadmin4-9.15.tar.gz \
+          https://github.com/electron/electron/releases/download/v42.1.0/electron-v42.1.0-linux-x64.zip"
 MD5SUM=""
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
