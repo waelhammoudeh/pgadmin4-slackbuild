@@ -1,12 +1,11 @@
 PRGNAM="pgAdmin4"
-VERSION="9.15"
+VERSION="9.16"
 HOMEPAGE="https://www.pgadmin.org"
-DOWNLOAD="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.15/source/pgadmin4-9.15.tar.gz \
-          https://github.com/electron/electron/releases/download/v42.1.0/electron-v42.1.0-linux-x64.zip"
+DOWNLOAD="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v9.16/source/pgadmin4-9.16.tar.gz \
+          https://github.com/electron/electron/releases/download/v43.0.0/electron-v43.0.0-linux-x64.zip"
 MD5SUM=""
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES="nodejs >= 20.0.0 , yarn, postgresql"
 MAINTAINER="Wael Hammoudeh"
 EMAIL="w_hammoudeh@hotmail.com"
-

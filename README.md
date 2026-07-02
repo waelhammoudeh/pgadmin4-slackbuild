@@ -5,7 +5,7 @@ Slackware64 build script for pgAdmin4 program.
 
 Use the script included here at your OWN risk.
 
-VERSION # 9.15
+VERSION # 9.16
 
 pgAdmin 4 is written as a web application with Python(Flask) on the server side
 and ReactJS, HTML5 with CSS for the client side processing and UI.
@@ -36,7 +36,8 @@ File list included in pgadmin4-slackbuild directory:
  7) config_distro.py
 
 NOTE:
-Upgraded "nodejs" to version 21.1.0 using Willy's script from SlackBuild.org
+Built with "nodejs" version "21.1.0". I used an old Willy's script from
+SlackBuilds.org to build nodejs package.
 
 Build Instructions:
 
@@ -54,4 +55,4 @@ Build Instructions:
 
 Wael Hammoudeh
 
-May 16/2026
+July 1/2026
